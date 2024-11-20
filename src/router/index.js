@@ -5,25 +5,44 @@ import { createRouter, createWebHistory } from 'vue-router'
 //import ProjectCreate from '@/components/projects/ProjectCreate.vue'
 //import Projects from '@/components/projects/Projects.vue'
 import Login from '@/components/auth/Login.vue'
-import teste from '@/components/auth/teste.vue'
+import Singleplayer from '@/components/singleplayer/Singleplayer.vue'
+import Multiplayer from '@/components/multiplayer/Multiplayer.vue'
+import Balance from '@/components/balance/Balance.vue'
+import ScoreBoard from '@/components/scoreBoard/ScoreBoard.vue'
+import Statistics from '@/components/statistics/Statistics.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    /*{
+    {
       path: '/',
-      name: 'tasks',
-      component: Tasks
-    },*/
+      name: 'singleplayer',
+      component: Singleplayer
+    },
     {
       path: '/login',
       name: 'login',
       component: Login
     },
     {
-      path: '/teste',
-      name: 'teste',
-      component: teste
+      path: '/multiplayer',
+      name: 'multiplayer',
+      component: Multiplayer
+    },
+    {
+      path: '/balance',
+      name: 'balance',
+      component: Balance
+    },
+    {
+      path: '/scoreBoard',
+      name: 'scoreBoard',
+      component: ScoreBoard
+    },
+    {
+      path: '/statistics',
+      name: 'statistics',
+      component: Statistics
     },
     /*{
       path: '/tasks',

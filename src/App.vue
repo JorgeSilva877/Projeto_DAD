@@ -36,15 +36,40 @@ const logout = () => {
   <div class="p-8 mx-auto max-w-3xl">
     <h1 class="text-5xl pb-8">MemoryGame</h1>
     <nav class="flex space-x-1 border-b-2 border-gray-800 text-base">
-      <span class="grow"></span>
-      <RouterLink :to="{ name: 'login' }" class="w-24 h-10 leading-10 text-center rounded-t-xl 
+      <RouterLink :to="{ name: 'singleplayer'}" class="w-24 h-10 leading-10 text-center rounded-t-xl
           border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500"
-        activeClass="bg-gray-800 hover:bg-gray-800">
-        Login
+          activeClass="bg-gray-800 hover:bg-gray-800">
+                  Singleplayer
       </RouterLink>
-      <button @click="logout" class="w-24 h-10 leading-10 text-center rounded-t-xl 
+      <RouterLink v-show="storeAuth.user" :to="{ name: 'multiplayer'}" class="w-24 h-10 leading-10 text-center rounded-t-xl
+          border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500"
+          activeClass="bg-gray-800 hover:bg-gray-800">
+                  Multiplayer
+      </RouterLink>
+      <RouterLink v-show="storeAuth.user" :to="{ name: 'balance'}" class="w-24 h-10 leading-10 text-center rounded-t-xl
+          border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500"
+          activeClass="bg-gray-800 hover:bg-gray-800">
+                  Balance
+      </RouterLink>
+      <RouterLink  v-show="storeAuth.user" :to="{ name: 'statistics'}" class="w-24 h-10 leading-10 text-center rounded-t-xl
+          border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500"
+          activeClass="bg-gray-800 hover:bg-gray-800">
+                  Statistics
+      </RouterLink>
+      <RouterLink :to="{ name: 'scoreBoard'}" class="w-24 h-10 leading-10 text-center rounded-t-xl
+          border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500"
+          activeClass="bg-gray-800 hover:bg-gray-800">
+                  Score Board
+      </RouterLink>
+      <span class="grow"></span>
+      <RouterLink v-show="!storeAuth.user" :to="{ name: 'login'}" class="w-24 h-10 leading-10 text-center rounded-t-xl
+          border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500"
+          activeClass="bg-gray-800 hover:bg-gray-800">
+                  Login
+      </RouterLink>
+      <button v-show="storeAuth.user" @click="logout" class="w-24 h-10 leading-10 text-center rounded-t-xl
           border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500">
-        Logout
+                  Logout
       </button>
     </nav>
     <RouterView></RouterView>
