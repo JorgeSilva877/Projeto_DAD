@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import { Button } from '@/components/ui/button'
 import {
@@ -19,6 +19,9 @@ const storeAuth = useAuthStore()
 const storeError = useErrorStore()
 const router = useRouter()
 
+const socket = inject('socket')
+const msgWebsocket = ref('')
+
 const credentials = ref({
     email: '',
     password: ''
@@ -30,6 +33,10 @@ const cancel = () => {
 
 const login = () => {
   storeAuth.login(credentials.value)
+}
+
+const websocketTest = () => {
+  socket.emit('echo', msgWebsocket.value)
 }
 </script>
 
@@ -51,6 +58,8 @@ const login = () => {
             <Label for="password">Password</Label>
             <Input id="password" type="password" v-model="credentials.password"/>
             <ErrorMessage :errorMessage="storeError.fieldMessage('password')"></ErrorMessage>
+
+            <Input id="websocket" placeholder="WebSocket echo"  v-model="msgWebsocket"/>
           </div>
         </div>
       </form>
@@ -61,6 +70,9 @@ const login = () => {
         </Button>
         <Button @click="login">
             Login
+        </Button>
+        <Button @click="websocketTest">
+            Websocket Teste
         </Button>
     </CardFooter>
   </Card>

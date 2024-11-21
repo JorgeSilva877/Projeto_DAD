@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref, computed, inject } from 'vue'
 import { defineStore } from 'pinia'
 import { useToast } from '@/components/ui/toast/use-toast'
 
@@ -9,6 +9,15 @@ export const useErrorStore = defineStore('error', () => {
     const _fieldErrorMessages = ref([]);
     const _statusCode = ref(0)
     const _title = ref('')
+
+    const socket = inject('socket')
+
+    socket.on('echotoclient', (mensagem) => {
+        toast({
+            description: mensagem,
+        })
+        //projects.value.push(project)
+    })
 
     const message = computed(() => {
         return _message.value.trim()
