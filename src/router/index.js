@@ -10,6 +10,7 @@ import Multiplayer from '@/components/multiplayer/Multiplayer.vue'
 import Balance from '@/components/balance/Balance.vue'
 import ScoreBoard from '@/components/scoreBoard/ScoreBoard.vue'
 import Statistics from '@/components/statistics/Statistics.vue'
+import Users from '@/components/users/Users.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -43,6 +44,11 @@ const router = createRouter({
       path: '/statistics',
       name: 'statistics',
       component: Statistics
+    },
+    {
+      path: '/users',
+      name: 'users',
+      component: Users
     },
     /*{
       path: '/tasks',
