@@ -39,6 +39,8 @@ export const useAuthStore = defineStore('auth', () => {
     const clearUser = () => {
         resetIntervalToRefreshToken()
         user.value = null
+        user.value = ''
+        localStorage.removeItem('token')
         axios.defaults.headers.common.Authorization = ''
     }
 
@@ -47,6 +49,7 @@ export const useAuthStore = defineStore('auth', () => {
         try {
             const responseLogin = await axios.post('auth/login', credentials)
             token.value = responseLogin.data.token
+            localStorage.setItem('token', token.value)
             axios.defaults.headers.common.Authorization = 'Bearer ' + token.value
             const responseUser = await axios.get('users/me')
             user.value = responseUser.data.data
@@ -78,8 +81,9 @@ export const useAuthStore = defineStore('auth', () => {
             return false
         }
     }
-    // These 2 functions and intervalToRefreshToken variable are "private" - not exported
+
     let intervalToRefreshToken = null
+    
     const resetIntervalToRefreshToken = () => {
         if (intervalToRefreshToken) {
             clearInterval(intervalToRefreshToken)
@@ -93,6 +97,7 @@ export const useAuthStore = defineStore('auth', () => {
         intervalToRefreshToken = setInterval(async () => {
             try {
                 const response = await axios.post('auth/refreshtoken')
+                localStorage.setItem('token', token.value)
                 token.value = response.data.token
                 axios.defaults.headers.common.Authorization = 'Bearer ' + token.value
                 return true
@@ -108,8 +113,28 @@ export const useAuthStore = defineStore('auth', () => {
         //}, 1000 * 10)
         return intervalToRefreshToken
     }
+
+    const restoreToken = async function () {
+        let storedToken = localStorage.getItem('token')
+        if (storedToken) {
+        try {
+            token.value = storedToken
+            axios.defaults.headers.common.Authorization = 'Bearer ' + token.value
+            const responseUser = await axios.get('users/me')
+            user.value = responseUser.data.data
+            repeatRefreshToken()
+            return true
+        } catch {
+            clearUser()
+            return false
+        }
+        }
+            return false
+    }
+
+
     return {
         user, userName, userEmail, userType, userPhotoUrl, userFirstLastName, userCurrentBalance,
-        login, logout
+        login, logout, restoreToken
     }
 })

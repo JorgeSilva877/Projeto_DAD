@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+
 import Login from '@/components/auth/Login.vue'
 
 import Index from '@/components/game/Index.vue'
@@ -15,6 +17,8 @@ import AddBalance from '@/components/user/AddBalance.vue'
 import MyAccount from '@/components/user/MyAccount.vue'
 import GamesHistory from '@/components/user/GamesHistory.vue'
 import TransactionHistory from '@/components/user/TransactionHistory.vue'
+
+let handlingFirstRoute = true
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -114,6 +118,38 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue')
     }
   ]
+})
+
+router.beforeEach(async (to, from, next) => {
+  
+
+  const storeAuth = useAuthStore()
+  if (handlingFirstRoute) {
+    handlingFirstRoute = false
+    await storeAuth.restoreToken()
+  }
+
+  //Routes not accessible to admins
+  if ((storeAuth.userType == 'A') && ((to.name == 'index') || (to.name == 'singleplayer') || (to.name == 'multiplayer'))) {
+    console.log(storeAuth.type)
+    next({ name: 'dashboard' })
+    return
+  }
+
+  //Routes not accessible to players
+  if ((storeAuth.userType == 'P') && ((to.name == 'dashboard') || (to.name == 'statistics'))) {
+    next({ name: 'index' })
+    return
+  }
+
+  //Routes not accessible to anonumous users
+  if ((!storeAuth.user) && ((to.name == 'dashboard') || (to.name == 'statistics'))) {
+    next({ name: 'index' })
+    return
+  }
+
+  // all other routes are accessible to everyone, including anonymous users
+  next()
 })
 
 export default router
