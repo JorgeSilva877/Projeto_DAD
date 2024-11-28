@@ -76,3 +76,24 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+.memory-title {
+    font-size: 3rem;
+    text-align: center;
+    font-weight: 700;
+    color: #444;
+    position: relative;
+    font-family: 'Tahoma', sans-serif;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.memory-title::after {
+    content: "";
+    display: block;
+    width: 100px;
+    height: 4px;
+    background-color: #FFD700;
+    margin: 10px auto 0;
+}

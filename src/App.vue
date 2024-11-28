@@ -4,15 +4,33 @@ import { RouterView } from 'vue-router'
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import GlobalAlertDialog from '@/components/common/GlobalAlertDialog.vue'
 import { useAuthStore } from '@/stores/auth'
+import { useGameStore } from '@/stores/game'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from '@/components/ui/navigation-menu'
+import { navigationMenuTriggerStyle } from '@/components/ui/navigation-menu'
+import ScoreBoard from './components/scoreBoard/ScoreBoard.vue'
 
-//const storeProject = useProjectStore()
-//const storeTask = useTaskStore()
 const storeAuth = useAuthStore()
+const storeGame = useGameStore()
 
-/*onMounted(() => {
-  storeTask.fetchTasks()
-  storeProject.fetchProjects()
-})*/
+onMounted(() => {
+  storeGame.fetchScoreboard();
+})
 
 
 const alertDialog = useTemplateRef('alert-dialog')
@@ -28,6 +46,7 @@ const logout = () => {
     `Are you sure you want to log out? You can still access your account later with
     your credentials.`)
 }
+
 </script>
 
 
@@ -35,53 +54,89 @@ const logout = () => {
 
   <Toaster />
   <GlobalAlertDialog ref="alert-dialog"></GlobalAlertDialog>
-  <div class="p-8 mx-auto max-w-3xl">
+  <div class="flex h-screen">
+    <!-- <ScoreBoard></ScoreBoard> -->
+    <ScoreBoard></ScoreBoard>
+  <!--<div class="p-8 mx-auto max-w-3xl">-->
+    <div class="w-full max-w-[90%] lg:max-w-[80%] mx-auto">
     <div class="flex justify-between">
-      <h1 class="text-5xl pb-8">MemoryGame</h1>
-      <img v-if="storeAuth.user" :src="storeAuth.userPhotoUrl" class="w-14 h-14 rounded-full"  alt="Rounded avatar">  
+      <RouterLink :to="storeAuth.userType == 'A' ? '/dashboard' : '/'">
+          <h1 class="memory-title">Memory Game</h1>
+      </RouterLink>
+      <!--<img v-if="storeAuth.user" :src="storeAuth.userPhotoUrl" class="w-14 h-14 rounded-full"  alt="Rounded avatar">  -->
+      <NavigationMenu>
+        <NavigationMenuLink v-if="!storeAuth.user">
+          <RouterLink :to="{ name: 'login'}" :class="navigationMenuTriggerStyle()">Login</RouterLink>
+        </NavigationMenuLink>
+        <NavigationMenuLink v-if="storeAuth.user">
+          <RouterLink :to="{ name: 'addBalance'}" :class="navigationMenuTriggerStyle()">{{ storeAuth.userCurrentBalance }}$</RouterLink>
+        </NavigationMenuLink>
+
+        <NavigationMenuList v-if="storeAuth.userType == 'A'">
+          <NavigationMenuItem>
+            <DropdownMenu v-if="storeAuth.user">
+              <DropdownMenuTrigger :class="navigationMenuTriggerStyle()">
+                Admin tools
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                class="bg-white shadow-lg rounded-md p-2 w-40" >
+                <DropdownMenuItem>
+                  <RouterLink :to="{ name: 'users'}" :class="navigationMenuTriggerStyle()">Users</RouterLink>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <RouterLink :to="{ name: 'statistics'}" :class="navigationMenuTriggerStyle()">Statistics</RouterLink>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <DropdownMenu v-if="storeAuth.user">
+              <DropdownMenuTrigger :class="navigationMenuTriggerStyle()">
+                {{ storeAuth.userFirstLastName }}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                class="bg-white shadow-lg rounded-md p-2 w-40" >
+                <DropdownMenuItem>
+                  <RouterLink :to="{ name: 'myAccount'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
+                    My account
+                  </RouterLink>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <RouterLink :to="{ name: 'addBalance'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
+                    Add brain coins
+                  </RouterLink>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <RouterLink :to="{ name: 'gamesHistory'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
+                    Games History
+                  </RouterLink>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <RouterLink :to="{ name: 'transactionHistory'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
+                    Transaction History
+                  </RouterLink>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <button @click="logout" class="w-full text-left text-red-600 hover:text-red-800 hover:bg-gray-100 px-2 py-1 rounded">
+                    Logout
+                  </button>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
     </div>
-    <nav class="flex space-x-1 border-b-2 border-gray-800 text-base">
-      <RouterLink :to="{ name: 'singleplayer'}" class="w-24 h-10 leading-10 text-center rounded-t-xl
-          border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500"
-          activeClass="bg-gray-800 hover:bg-gray-800">
-                  Singleplayer
-      </RouterLink>
-      <RouterLink v-show="storeAuth.user" :to="{ name: 'multiplayer'}" class="w-24 h-10 leading-10 text-center rounded-t-xl
-          border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500"
-          activeClass="bg-gray-800 hover:bg-gray-800">
-                  Multiplayer
-      </RouterLink>
-      <RouterLink v-show="storeAuth.user" :to="{ name: 'balance'}" class="w-24 h-10 leading-10 text-center rounded-t-xl
-          border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500"
-          activeClass="bg-gray-800 hover:bg-gray-800">
-                  Balance
-      </RouterLink>
-      <RouterLink  v-show="storeAuth.user" :to="{ name: 'statistics'}" class="w-24 h-10 leading-10 text-center rounded-t-xl
-          border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500"
-          activeClass="bg-gray-800 hover:bg-gray-800">
-                  Statistics
-      </RouterLink>
-      <RouterLink :to="{ name: 'scoreBoard'}" class="w-24 h-10 leading-10 text-center rounded-t-xl
-          border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500"
-          activeClass="bg-gray-800 hover:bg-gray-800">
-                  Score Board
-      </RouterLink>
-      <RouterLink v-show="storeAuth.userType == 'A'" :to="{ name: 'users'}" class="w-24 h-10 leading-10 text-center rounded-t-xl
-          border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500"
-          activeClass="bg-gray-800 hover:bg-gray-800">
-                  Users
-      </RouterLink>
-      <span class="grow"></span>
-      <RouterLink v-show="!storeAuth.user" :to="{ name: 'login'}" class="w-24 h-10 leading-10 text-center rounded-t-xl
-          border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500"
-          activeClass="bg-gray-800 hover:bg-gray-800">
-                  Login
-      </RouterLink>
-      <button v-show="storeAuth.user" @click="logout" class="w-24 h-10 leading-10 text-center rounded-t-xl
-          border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500">
-                  Logout
-      </button>
-    </nav>
     <RouterView></RouterView>
   </div>
+  </div>
+  <footer class="bg-yellow-600 text-white py-4 mt-auto">
+      <div class="text-center">
+        <p>&copy; 2024 Memory Game. All Rights Reserved.</p>
+      </div>
+  </footer>
 </template>

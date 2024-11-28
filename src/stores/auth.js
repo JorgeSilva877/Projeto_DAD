@@ -32,6 +32,9 @@ export const useAuthStore = defineStore('auth', () => {
         }
         return avatarNoneAssetURL
     })
+    const userCurrentBalance = computed(() => {
+        return user.value ? user.value.brain_coins_balance : ''
+    })
     // This function is "private" - not exported by the store
     const clearUser = () => {
         resetIntervalToRefreshToken()
@@ -48,7 +51,11 @@ export const useAuthStore = defineStore('auth', () => {
             const responseUser = await axios.get('users/me')
             user.value = responseUser.data.data
             repeatRefreshToken()
-            router.push({ name: 'singleplayer' })
+            if(user.value.type == 'A'){
+                router.push({ name: 'dashboard' })
+            }else{
+                router.push({ name: 'index' })
+            }
             return user.value
         } catch (e) {
             clearUser()
@@ -102,7 +109,7 @@ export const useAuthStore = defineStore('auth', () => {
         return intervalToRefreshToken
     }
     return {
-        user, userName, userEmail, userType, userPhotoUrl, userFirstLastName,
+        user, userName, userEmail, userType, userPhotoUrl, userFirstLastName, userCurrentBalance,
         login, logout
     }
 })

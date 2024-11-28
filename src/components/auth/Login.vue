@@ -58,7 +58,8 @@ const websocketTest = () => {
             <Label for="password">Password</Label>
             <Input id="password" type="password" v-model="credentials.password" v-on:keydown.enter="login"/>
             <ErrorMessage :errorMessage="storeError.fieldMessage('password')"></ErrorMessage>
-
+            
+            <Label>Web-Socket Test</Label>
             <Input id="websocket" placeholder="WebSocket echo"  v-model="msgWebsocket"/>
           </div>
         </div>
@@ -68,10 +69,10 @@ const websocketTest = () => {
         <Button variant="outline" @click="cancel">
             Cancel
         </Button>
-        <Button @click="login">
+        <Button class="bg-yellow-500 hover:bg-yellow-400 text-white font-semibold py-2 px-4 rounded-lg" @click="login">
             Login
         </Button>
-        <Button @click="websocketTest">
+        <Button class="bg-yellow-500 hover:bg-yellow-400 text-white font-semibold py-2 px-4 rounded-lg" @click="websocketTest">
             Websocket Teste
         </Button>
     </CardFooter>

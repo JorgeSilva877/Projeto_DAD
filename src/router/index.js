@@ -1,24 +1,28 @@
 import { createRouter, createWebHistory } from 'vue-router'
-//import Tasks from '@/components/tasks/Tasks.vue'
-//import TaskUpdate from '@/components/tasks/TaskUpdate.vue'
-//import ProjectUpdate from '@/components/projects/ProjectUpdate.vue'
-//import ProjectCreate from '@/components/projects/ProjectCreate.vue'
-//import Projects from '@/components/projects/Projects.vue'
 import Login from '@/components/auth/Login.vue'
-import Singleplayer from '@/components/singleplayer/Singleplayer.vue'
-import Multiplayer from '@/components/multiplayer/Multiplayer.vue'
-import Balance from '@/components/balance/Balance.vue'
+
+import Index from '@/components/game/Index.vue'
+import Singleplayer from '@/components/game/Singleplayer.vue'
+import Multiplayer from '@/components/game/Multiplayer.vue'
+
 import ScoreBoard from '@/components/scoreBoard/ScoreBoard.vue'
-import Statistics from '@/components/statistics/Statistics.vue'
-import Users from '@/components/users/Users.vue'
+
+import Dashboard from '@/components/adminTools/Dashboard.vue'
+import Statistics from '@/components/adminTools/Statistics.vue'
+import Users from '@/components/adminTools/Users.vue'
+
+import AddBalance from '@/components/user/AddBalance.vue'
+import MyAccount from '@/components/user/MyAccount.vue'
+import GamesHistory from '@/components/user/GamesHistory.vue'
+import TransactionHistory from '@/components/user/TransactionHistory.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'singleplayer',
-      component: Singleplayer
+      name: 'index',
+      component: Index
     },
     {
       path: '/login',
@@ -26,14 +30,24 @@ const router = createRouter({
       component: Login
     },
     {
+      path: '/singleplayer',
+      name: 'singleplayer',
+      component: Singleplayer
+    },
+    {
       path: '/multiplayer',
       name: 'multiplayer',
       component: Multiplayer
     },
     {
-      path: '/balance',
-      name: 'balance',
-      component: Balance
+      path: '/addBalance',
+      name: 'addBalance',
+      component: AddBalance
+    },
+    {
+      path: '/myAccount',
+      name: 'myAccount',
+      component: MyAccount
     },
     {
       path: '/scoreBoard',
@@ -49,6 +63,21 @@ const router = createRouter({
       path: '/users',
       name: 'users',
       component: Users
+    },
+    {
+      path: '/gamesHistory',
+      name: 'gamesHistory',
+      component: GamesHistory
+    },
+    {
+      path: '/transactionHistory',
+      name: 'transactionHistory',
+      component: TransactionHistory
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: Dashboard
     },
     /*{
       path: '/tasks',

@@ -3,5 +3,5 @@
 </script>
 
 <template>
-  <h1>BALANCE PAGE</h1>
+  <h1>MY ACCOUNT PAGE</h1>
 </template>
