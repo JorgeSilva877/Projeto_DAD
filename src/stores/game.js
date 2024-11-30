@@ -9,8 +9,11 @@ export const useGameStore = defineStore('game', () => {
     const singleplayerBestTime_BoardThreeFour = ref(null)
     const singleplayerBestTime_BoardFourFour = ref(null)
     const singleplayerBestTime_BoardSixSix = ref(null)
+    const singleplayerLessTurns_BoardThreeFour = ref(null)
+    const singleplayerLessTurns_BoardFourFour = ref(null)
+    const singleplayerLessTurns_BoardSixSix = ref(null)
 
-    //const getScoreboard = computed(() => scoreboard.value)
+    
 
     const getMultiplayerMostWins = computed(() => {
         return multiplayerMostWins.value ? multiplayerMostWins.value : []
@@ -28,6 +31,18 @@ export const useGameStore = defineStore('game', () => {
         return singleplayerBestTime_BoardSixSix.value ? singleplayerBestTime_BoardSixSix.value : []
     })
 
+    const getSinglePlayerLessTurns_BoardThreeFour = computed(() => {
+        return singleplayerLessTurns_BoardThreeFour.value ? singleplayerLessTurns_BoardThreeFour.value : []
+    })
+
+    const getSinglePlayerLessTurns_BoardFourFour = computed(() => {
+        return singleplayerLessTurns_BoardFourFour.value ? singleplayerLessTurns_BoardFourFour.value : []
+    })
+
+    const getSinglePlayerLessTurns_BoardSixSix = computed(() => {
+        return singleplayerLessTurns_BoardSixSix.value ? singleplayerLessTurns_BoardSixSix.value : []
+    })
+
     const fetchScoreboard = async () => {
         storeError.resetMessages()
         try {
@@ -40,11 +55,22 @@ export const useGameStore = defineStore('game', () => {
            const singleplayerBestTime_BoardFourFour_promise = axios.get('topSingleplayerBestTimeFourFourBoard')
            //jogos singleplayer -> Melhor tempo (board 6x6)
            const singleplayerBestTime_BoardSixSix_promise = axios.get('topSingleplayerBestTimeSixSixBoard')
+           //jogos singleplayer -> Menos peças viradas (board 3x4)
+           const singleplayerLessTurns_BoardThreeFour_promise = axios.get('topSingleplayerLessTurnsThreeFourBoard')
+           //jogos singleplayer -> Menos peças viradas (board 4x4)
+           const singleplayerLessTurns_BoardFourFour_promise = axios.get('topSingleplayerLessTurnsFourFourBoard')
+           //jogos singleplayer -> Menos peças viradas (board 6x6)
+           const singleplayerLessTurns_BoardSixSix_promise = axios.get('topSingleplayerLessTurnsSixSixBoard')
 
            multiplayerMostWins.value = (await multiplayerMostWins_promise).data
+
            singleplayerBestTime_BoardThreeFour.value = (await singleplayerBestTime_BoardThreeFour_promise).data
            singleplayerBestTime_BoardFourFour.value = (await singleplayerBestTime_BoardFourFour_promise).data
            singleplayerBestTime_BoardSixSix.value = (await singleplayerBestTime_BoardSixSix_promise).data
+
+           singleplayerLessTurns_BoardThreeFour.value = (await singleplayerLessTurns_BoardThreeFour_promise).data
+           singleplayerLessTurns_BoardFourFour.value = (await singleplayerLessTurns_BoardFourFour_promise).data
+           singleplayerLessTurns_BoardSixSix.value = (await singleplayerLessTurns_BoardSixSix_promise).data
 
            return true
 
@@ -56,6 +82,7 @@ export const useGameStore = defineStore('game', () => {
     }
    
     return {
-        fetchScoreboard, getMultiplayerMostWins, getSinglePlayerBestTime_BoardThreeFour, getSinglePlayerBestTime_BoardFourFour, getSinglePlayerBestTime_BoardSixSix
+        fetchScoreboard, getMultiplayerMostWins, getSinglePlayerBestTime_BoardThreeFour, getSinglePlayerBestTime_BoardFourFour, getSinglePlayerBestTime_BoardSixSix,
+        getSinglePlayerLessTurns_BoardThreeFour, getSinglePlayerLessTurns_BoardFourFour, getSinglePlayerLessTurns_BoardSixSix
     }
 })

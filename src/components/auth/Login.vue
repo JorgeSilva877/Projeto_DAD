@@ -38,6 +38,9 @@ const login = () => {
 const websocketTest = () => {
   socket.emit('echo', msgWebsocket.value)
 }
+
+storeError.resetMessages()
+
 </script>
 
 <template>
@@ -76,5 +79,13 @@ const websocketTest = () => {
             Websocket Teste
         </Button>
     </CardFooter>
+    <p class="mt-1 text-center text-sm text-gray-500">
+      Not registered yet? 
+      <RouterLink :to="{name: 'register'}">
+        <a class="text-yellow-500 hover:underline font-medium">
+          Create an account here!
+        </a>
+      </RouterLink>
+    </p>
   </Card>
 </template>

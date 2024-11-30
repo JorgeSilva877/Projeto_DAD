@@ -55,15 +55,12 @@ const logout = () => {
   <Toaster />
   <GlobalAlertDialog ref="alert-dialog"></GlobalAlertDialog>
   <div class="flex h-screen">
-    <!-- <ScoreBoard></ScoreBoard> -->
     <ScoreBoard></ScoreBoard>
-  <!--<div class="p-8 mx-auto max-w-3xl">-->
     <div class="w-full max-w-[90%] lg:max-w-[80%] mx-auto">
     <div class="flex justify-between">
       <RouterLink :to="storeAuth.userType == 'A' ? '/dashboard' : '/'">
           <h1 class="memory-title">Memory Game</h1>
       </RouterLink>
-      <!--<img v-if="storeAuth.user" :src="storeAuth.userPhotoUrl" class="w-14 h-14 rounded-full"  alt="Rounded avatar">  -->
       <NavigationMenu>
         <NavigationMenuLink v-if="!storeAuth.user">
           <RouterLink :to="{ name: 'login'}" :class="navigationMenuTriggerStyle()">Login</RouterLink>
