@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import MultiplayerMostWins from './MultiplayerMostWins.vue'
 import SingleplayerBestTime from './SingleplayerBestTime.vue'
+import SingleplayerLessTurns from './SingleplayerLessTurns.vue'
 import NoBoardscoreData from './NoBoardscoreData.vue'
 import { useGameStore } from '@/stores/game'
 
@@ -116,7 +117,7 @@ const toggleDropdown = (dropdownRequest) => {
 
     <div v-if="storeGame.getSinglePlayerBestTime_BoardThreeFour.length > 0 || storeGame.getSinglePlayerBestTime_BoardFourFour.length > 0 || storeGame.getSinglePlayerBestTime_BoardSixSix.length > 0" class="mb-4">
       <button @click="toggleDropdown('lessMoves')" class="w-full text-left font-semibold text-gray-800 mb-2">
-        🏆 Singleplayer Less Moves
+        🏆 Singleplayer Less Turns
       </button>
       <ul v-show="showSingleplayerLessMoves" class="space-y-2 pl-4">
         <li v-if="storeGame.getSinglePlayerBestTime_BoardThreeFour.length > 0" class="text-gray-700 hover:text-black font-medium">
@@ -124,7 +125,7 @@ const toggleDropdown = (dropdownRequest) => {
             3x4 Board
           </button>
           <ul v-show="showBoard1" class="space-y-4 pl-4">
-            <SingleplayerBestTime :winnersList="storeGame.getSinglePlayerBestTime_BoardThreeFour" :readonly="true"></SingleplayerBestTime>
+            <SingleplayerLessTurns :winnersList="storeGame.getSinglePlayerLessTurns_BoardThreeFour" :readonly="true"></SingleplayerLessTurns>
           </ul>
         </li>
         <li v-if="storeGame.getSinglePlayerBestTime_BoardThreeFour.length > 0" class="text-gray-700 hover:text-black font-medium">
@@ -132,7 +133,7 @@ const toggleDropdown = (dropdownRequest) => {
             4x4 Board
           </button>
           <ul v-show="showBoard2" class="space-y-4 pl-4">
-            <SingleplayerBestTime :winnersList="storeGame.getSinglePlayerBestTime_BoardThreeFour" :readonly="true"></SingleplayerBestTime>
+            <SingleplayerLessTurns :winnersList="storeGame.getSinglePlayerLessTurns_BoardFourFour" :readonly="true"></SingleplayerLessTurns>
           </ul>
         </li>
         <li v-if="storeGame.getSinglePlayerBestTime_BoardThreeFour.length > 0" class="text-gray-700 hover:text-black font-medium">
@@ -140,7 +141,7 @@ const toggleDropdown = (dropdownRequest) => {
             6x6 Board
           </button>
           <ul v-show="showBoard3" class="space-y-4 pl-4">
-            <SingleplayerBestTime :winnersList="storeGame.getSinglePlayerBestTime_BoardThreeFour" :readonly="true"></SingleplayerBestTime>
+            <SingleplayerLessTurns :winnersList="storeGame.getSinglePlayerLessTurns_BoardSixSix" :readonly="true"></SingleplayerLessTurns>
           </ul>
         </li>
       </ul>

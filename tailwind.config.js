@@ -11,8 +11,13 @@ module.exports = {
     './components/**/*.{js,jsx,vue}',
     './app/**/*.{js,jsx,vue}',
     './src/**/*.{js,jsx,vue}',
+    './src/**/*.{html,js,vue}',
 	],
-  
+  safelist: [
+    {
+      pattern: /grid-cols-\d+/,
+    },
+  ],
   theme: {
     container: {
       center: true,

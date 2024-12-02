@@ -67,6 +67,33 @@ export const useAuthStore = defineStore('auth', () => {
             return false
         }
     }
+
+
+    const register = async (credentials) => {
+        storeError.resetMessages()
+        try {
+            
+            const responseRegister = await axios.post('auth/register', credentials)
+            token.value = responseRegister.data.token
+            localStorage.setItem('token', token.value)
+            axios.defaults.headers.common.Authorization = 'Bearer ' + token.value
+            const responseUser = await axios.get('users/me')
+            user.value = responseUser.data.data
+            repeatRefreshToken()
+            if(user.value.type == 'A'){
+                router.push({ name: 'dashboard' })
+            }else{
+                router.push({ name: 'index' })
+            }
+            return user.value
+        } catch (e) {
+            clearUser()
+            storeError.setErrorMessages(e.response.data.message, e.response.data.errors,
+                e.response.status, 'Authentication Error!')
+            return false
+        }
+    }
+
     const logout = async () => {
         storeError.resetMessages()
         try {
@@ -135,6 +162,6 @@ export const useAuthStore = defineStore('auth', () => {
 
     return {
         user, userName, userEmail, userType, userPhotoUrl, userFirstLastName, userCurrentBalance,
-        login, logout, restoreToken
+        login, logout, restoreToken, register
     }
 })

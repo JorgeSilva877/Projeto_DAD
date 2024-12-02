@@ -2,10 +2,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
 import Login from '@/components/auth/Login.vue'
+import Register from '@/components/auth/Register.vue'
 
 import Index from '@/components/game/Index.vue'
 import Singleplayer from '@/components/game/Singleplayer.vue'
 import Multiplayer from '@/components/game/Multiplayer.vue'
+import Singleplayer_Board from '@/components/game/Singleplayer_Board.vue'
 
 import ScoreBoard from '@/components/scoreBoard/ScoreBoard.vue'
 
@@ -27,6 +29,10 @@ const router = createRouter({
       path: '/',
       name: 'index',
       component: Index
+    },
+    {
+      path: '/index',
+      redirect: { name: 'index' }
     },
     {
       path: '/login',
@@ -83,31 +89,49 @@ const router = createRouter({
       name: 'dashboard',
       component: Dashboard
     },
-    /*{
-      path: '/tasks',
-      redirect: { name: 'tasks' }
+    {
+      path: '/register',
+      name: 'register',
+      component: Register
+    },
+    { //estas rotas ainda dao para otimizar, coisa que futuramente farei
+      path: '/singleplayer_3x4',
+      name: 'singleplayer_3x4',
+      component: Singleplayer_Board,
+      props: {
+        rows: 3,
+        cols: 4,
+      },
     },
     {
+      path: '/singleplayer_4x4',
+      name: 'singleplayer_4x4',
+      component: Singleplayer_Board,
+      props: {
+        rows: 4,
+        cols: 4,
+      },
+    },
+    {
+      path: '/singleplayer_6x6',
+      name: 'singleplayer_6x6',
+      component: Singleplayer_Board,
+      props: {
+        rows: 6,
+        cols: 6,
+      },
+    },
+    /*{
       path: '/tasks/:id',
       name: 'updateTask',
       component: TaskUpdate,
       props: route => ({ id: parseInt(route.params.id) })
     },
     {
-      path: '/projects',
-      name: 'projects',
-      component: Projects
-    },
-    {
       path: '/projects/:id',
       name: 'updateProject',
       component: ProjectUpdate,
       props: route => ({ id: parseInt(route.params.id) })
-    },    
-    {
-      path: '/projects/new',
-      name: 'createProject',
-      component: ProjectCreate,
     },*/    
     {
       path: '/about',
@@ -145,6 +169,12 @@ router.beforeEach(async (to, from, next) => {
   //Routes not accessible to anonumous users
   if ((!storeAuth.user) && ((to.name == 'dashboard') || (to.name == 'statistics'))) {
     next({ name: 'index' })
+    return
+  }
+
+  //Routes not accessible to logged users
+  if ((storeAuth.user) && ((to.name == 'register'))) {
+    next({ name: from.name })
     return
   }
 
