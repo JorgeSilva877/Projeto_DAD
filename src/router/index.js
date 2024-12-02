@@ -7,6 +7,7 @@ import Register from '@/components/auth/Register.vue'
 import Index from '@/components/game/Index.vue'
 import Singleplayer from '@/components/game/Singleplayer.vue'
 import Multiplayer from '@/components/game/Multiplayer.vue'
+import Singleplayer_Board from '@/components/game/Singleplayer_Board.vue'
 
 import ScoreBoard from '@/components/scoreBoard/ScoreBoard.vue'
 
@@ -92,6 +93,33 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: Register
+    },
+    { //estas rotas ainda dao para otimizar, coisa que futuramente farei
+      path: '/singleplayer_3x4',
+      name: 'singleplayer_3x4',
+      component: Singleplayer_Board,
+      props: {
+        rows: 3,
+        cols: 4,
+      },
+    },
+    {
+      path: '/singleplayer_4x4',
+      name: 'singleplayer_4x4',
+      component: Singleplayer_Board,
+      props: {
+        rows: 4,
+        cols: 4,
+      },
+    },
+    {
+      path: '/singleplayer_6x6',
+      name: 'singleplayer_6x6',
+      component: Singleplayer_Board,
+      props: {
+        rows: 6,
+        cols: 6,
+      },
     },
     /*{
       path: '/tasks/:id',
