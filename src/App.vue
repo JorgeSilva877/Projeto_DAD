@@ -63,10 +63,13 @@ const logout = () => {
             <h1 class="memory-title">Memory Game</h1>
         </RouterLink>
         <NavigationMenu>
+          <NavigationMenuLink v-if="!(storeAuth.userType == 'A')">
+            <RouterLink :to="{ name: 'aboutUs'}" :class="navigationMenuTriggerStyle()">About us</RouterLink>
+          </NavigationMenuLink>
           <NavigationMenuLink v-if="!storeAuth.user">
             <RouterLink :to="{ name: 'login'}" :class="navigationMenuTriggerStyle()">Login</RouterLink>
           </NavigationMenuLink>
-          <NavigationMenuLink v-if="storeAuth.user">
+          <NavigationMenuLink v-if="storeAuth.userType == 'P'">
             <RouterLink :to="{ name: 'addBalance'}" :class="navigationMenuTriggerStyle()">{{ storeAuth.userCurrentBalance }}$</RouterLink>
           </NavigationMenuLink>
 

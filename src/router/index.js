@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
+import AboutUs from '@/components/app/AboutUs.vue'
+
 import Login from '@/components/auth/Login.vue'
 import Register from '@/components/auth/Register.vue'
 
@@ -29,6 +31,11 @@ const router = createRouter({
       path: '/',
       name: 'index',
       component: Index
+    },
+    {
+      path: '/aboutUs',
+      name: 'aboutUs',
+      component: AboutUs
     },
     {
       path: '/index',
@@ -154,7 +161,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   //Routes not accessible to admins
-  if ((storeAuth.userType == 'A') && ((to.name == 'index') || (to.name == 'singleplayer') || (to.name == 'multiplayer'))) {
+  if ((storeAuth.userType == 'A') && ((to.name == 'index') || (to.name == 'singleplayer') || (to.name == 'multiplayer') || (to.name == 'aboutUs'))) {
     console.log(storeAuth.type)
     next({ name: 'dashboard' })
     return
