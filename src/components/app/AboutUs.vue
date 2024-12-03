@@ -85,17 +85,17 @@ onMounted(() => {
       <div v-if="storeStatistic.getTotalUsers > 0" class="max-w-5xl mx-auto mt-12 px-6 py-8 bg-white shadow-lg rounded-lg">
         <h2 class="text-4xl font-bold text-yellow-500 text-center">Our Numbers</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
-          <!-- Estatística 1 -->
+          <!-- Total users -->
           <div class="text-center">
             <h3 class="text-5xl font-extrabold text-yellow-500">{{ storeStatistic.getTotalUsers }}</h3>
             <p class="mt-2 text-lg text-gray-700">Registered Users</p>
           </div>
-          <!-- Estatística 2 -->
+          <!-- Total games -->
           <div class="text-center">
             <h3 class="text-5xl font-extrabold text-yellow-500">{{ storeStatistic.getTotalGames }}</h3>
             <p class="mt-2 text-lg text-gray-700">Games Played</p>
           </div>
-          <!-- Estatística 3 -->
+          <!-- Total games this month -->
           <div class="text-center">
             <h3 class="text-5xl font-extrabold text-yellow-500">{{ storeStatistic.getTotalGamesThisMonth }}</h3>
             <p class="mt-2 text-lg text-gray-700">Games Played this Month</p>
