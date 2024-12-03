@@ -167,7 +167,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   //Routes not accessible to anonumous users
-  if ((!storeAuth.user) && ((to.name == 'dashboard') || (to.name == 'statistics'))) {
+  if ((!storeAuth.user) && ((to.name == 'dashboard') || (to.name == 'myAccount'))) {
     next({ name: 'index' })
     return
   }

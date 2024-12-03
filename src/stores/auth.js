@@ -22,6 +22,9 @@ export const useAuthStore = defineStore('auth', () => {
     const userEmail = computed(() => {
         return user.value ? user.value.email : ''
     })
+    const userNickname = computed(() => {
+        return user.value ? user.value.nickname : ''
+    })
     const userType = computed(() => {
         return user.value ? user.value.type : ''
     })
@@ -161,7 +164,7 @@ export const useAuthStore = defineStore('auth', () => {
 
 
     return {
-        user, userName, userEmail, userType, userPhotoUrl, userFirstLastName, userCurrentBalance,
+        user, userName, userEmail, userType, userPhotoUrl, userFirstLastName, userCurrentBalance, userNickname,
         login, logout, restoreToken, register
     }
 })
