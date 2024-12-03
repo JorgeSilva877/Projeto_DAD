@@ -16,7 +16,7 @@ import Statistics from '@/components/adminTools/Statistics.vue'
 import Users from '@/components/adminTools/Users.vue'
 
 import AddBalance from '@/components/user/AddBalance.vue'
-import MyAccount from '@/components/user/MyAccount.vue'
+import ViewProfile from '@/components/user/ViewProfile.vue'
 import GamesHistory from '@/components/user/GamesHistory.vue'
 import TransactionHistory from '@/components/user/TransactionHistory.vue'
 
@@ -55,9 +55,9 @@ const router = createRouter({
       component: AddBalance
     },
     {
-      path: '/myAccount',
-      name: 'myAccount',
-      component: MyAccount
+      path: '/viewProfile',
+      name: 'viewProfile',
+      component: ViewProfile
     },
     {
       path: '/scoreBoard',
@@ -167,7 +167,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   //Routes not accessible to anonumous users
-  if ((!storeAuth.user) && ((to.name == 'dashboard') || (to.name == 'myAccount'))) {
+  if ((!storeAuth.user) && ((to.name == 'dashboard') || (to.name == 'viewProfile'))) {
     next({ name: 'index' })
     return
   }

@@ -98,7 +98,7 @@ const logout = () => {
                 <DropdownMenuContent
                   class="bg-white shadow-lg rounded-md p-2 w-40" >
                   <DropdownMenuItem>
-                    <RouterLink :to="{ name: 'myAccount'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
+                    <RouterLink :to="{ name: 'viewProfile'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
                       Profile
                     </RouterLink>
                   </DropdownMenuItem>
