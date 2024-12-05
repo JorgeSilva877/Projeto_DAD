@@ -2,9 +2,10 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useErrorStore } from '@/stores/error'
+import { useToast } from '@/components/ui/toast/use-toast'
 export const useGameStore = defineStore('game', () => {
+    const { toast } = useToast()
     const storeError = useErrorStore()
-    const game = ref(null)
     const multiplayerMostWins = ref(null)
     const singleplayerBestTime_BoardThreeFour = ref(null)
     const singleplayerBestTime_BoardFourFour = ref(null)
@@ -12,6 +13,7 @@ export const useGameStore = defineStore('game', () => {
     const singleplayerLessTurns_BoardThreeFour = ref(null)
     const singleplayerLessTurns_BoardFourFour = ref(null)
     const singleplayerLessTurns_BoardSixSix = ref(null)
+    const personalGames = ref(null)
 
     
 
@@ -41,6 +43,10 @@ export const useGameStore = defineStore('game', () => {
 
     const getSinglePlayerLessTurns_BoardSixSix = computed(() => {
         return singleplayerLessTurns_BoardSixSix.value ? singleplayerLessTurns_BoardSixSix.value : []
+    })
+
+    const getPersonalGames = computed(() => {
+        return personalGames.value ? personalGames.value : []
     })
 
     const fetchScoreboard = async () => {
@@ -80,9 +86,39 @@ export const useGameStore = defineStore('game', () => {
             return false
         }
     }
+
+
+    const fetchPersonalGames = async (userId) => {
+        storeError.resetMessages()
+        try {
+            if (userId == 0) {
+                console.log(userId)
+                toast({
+                    description: 'Cannot load your history. Try again later.',
+                    variant: 'destructive',
+                });
+                
+                return false
+            }
+
+           //faz pedido get à API para ter todos os jogos do utilizador
+           const allPersonalGames_promise =  axios.get('game/allGames_'+userId)
+            //Atribui o resultado à variavel da store
+           personalGames.value = (await allPersonalGames_promise).data
+
+
+           return true
+
+        } catch (e) {
+            storeError.setErrorMessages(e.response.data.message, e.response.data.errors,
+                e.response.status, 'Cannot load your history. Try again later.')
+            return false
+        }
+    }
    
     return {
-        fetchScoreboard, getMultiplayerMostWins, getSinglePlayerBestTime_BoardThreeFour, getSinglePlayerBestTime_BoardFourFour, getSinglePlayerBestTime_BoardSixSix,
-        getSinglePlayerLessTurns_BoardThreeFour, getSinglePlayerLessTurns_BoardFourFour, getSinglePlayerLessTurns_BoardSixSix
+        fetchScoreboard, fetchPersonalGames,
+        getMultiplayerMostWins, getSinglePlayerBestTime_BoardThreeFour, getSinglePlayerBestTime_BoardFourFour, getSinglePlayerBestTime_BoardSixSix,
+        getSinglePlayerLessTurns_BoardThreeFour, getSinglePlayerLessTurns_BoardFourFour, getSinglePlayerLessTurns_BoardSixSix, getPersonalGames
     }
 })

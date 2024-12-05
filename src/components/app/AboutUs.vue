@@ -88,7 +88,7 @@ onMounted(() => {
           <!-- Total users -->
           <div class="text-center">
             <h3 class="text-5xl font-extrabold text-yellow-500">{{ storeStatistic.getTotalUsers }}</h3>
-            <p class="mt-2 text-lg text-gray-700">Registered Users</p>
+            <p class="mt-2 text-lg text-gray-700">Registered Players</p>
           </div>
           <!-- Total games -->
           <div class="text-center">

@@ -12,6 +12,10 @@ export const useAuthStore = defineStore('auth', () => {
     const token = ref('')
     const { toast } = useToast()
 
+    const userId = computed(() => {
+        return user.value ? user.value.id : 0
+    })
+
     const userName = computed(() => {
         return user.value ? user.value.name : ''
     })
@@ -268,7 +272,7 @@ export const useAuthStore = defineStore('auth', () => {
 
 
     return {
-        user, userName, userEmail, userType, userPhotoUrl, userFirstLastName, userCurrentBalance, userNickname,
+        user, userName, userEmail, userType, userPhotoUrl, userFirstLastName, userCurrentBalance, userNickname, userId,
         login, logout, restoreToken, register, updateProfile, updatePassword, deleteLoggedUser
     }
 })
