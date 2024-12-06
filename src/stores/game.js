@@ -49,6 +49,11 @@ export const useGameStore = defineStore('game', () => {
         return personalGames.value ? personalGames.value : []
     })
 
+    const getGameDetail = (id) => {
+        return computed(() => personalGames.value.find(game => game.id === id));
+    };
+
+
     const fetchScoreboard = async () => {
         storeError.resetMessages()
         try {
@@ -119,6 +124,7 @@ export const useGameStore = defineStore('game', () => {
     return {
         fetchScoreboard, fetchPersonalGames,
         getMultiplayerMostWins, getSinglePlayerBestTime_BoardThreeFour, getSinglePlayerBestTime_BoardFourFour, getSinglePlayerBestTime_BoardSixSix,
-        getSinglePlayerLessTurns_BoardThreeFour, getSinglePlayerLessTurns_BoardFourFour, getSinglePlayerLessTurns_BoardSixSix, getPersonalGames
+        getSinglePlayerLessTurns_BoardThreeFour, getSinglePlayerLessTurns_BoardFourFour, getSinglePlayerLessTurns_BoardSixSix, getPersonalGames,
+        getGameDetail
     }
 })

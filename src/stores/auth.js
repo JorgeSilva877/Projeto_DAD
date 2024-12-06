@@ -254,9 +254,10 @@ export const useAuthStore = defineStore('auth', () => {
 
     const deleteLoggedUser = async () => {
         try {
-            const responseDelete = await axios.put('user/remove/'+user.value.id)
+            const responseDelete = await axios.delete('user/'+user.value.id)
             
-            logout();
+            clearUser()
+            router.push({ name: 'login' })
 
             toast({
                 description: 'Your account has been correctly deleted.',

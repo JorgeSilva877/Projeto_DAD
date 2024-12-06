@@ -20,6 +20,7 @@ import Users from '@/components/adminTools/Users.vue'
 import AddBalance from '@/components/user/AddBalance.vue'
 import ViewProfile from '@/components/user/ViewProfile.vue'
 import GamesHistory from '@/components/user/GamesHistory.vue'
+import GameDetail from '@/components/user/GameDetail.vue'
 import TransactionHistory from '@/components/user/TransactionHistory.vue'
 
 let handlingFirstRoute = true
@@ -84,7 +85,7 @@ const router = createRouter({
     {
       path: '/gamesHistory',
       name: 'gamesHistory',
-      component: GamesHistory
+      component: GamesHistory,
     },
     {
       path: '/transactionHistory',
@@ -128,26 +129,18 @@ const router = createRouter({
         cols: 6,
       },
     },
-    /*{
-      path: '/tasks/:id',
-      name: 'updateTask',
-      component: TaskUpdate,
+    {
+      path: '/games/:id',
+      name: 'gameDetail',
+      component: GameDetail,
       props: route => ({ id: parseInt(route.params.id) })
     },
-    {
+    /*{
       path: '/projects/:id',
       name: 'updateProject',
       component: ProjectUpdate,
       props: route => ({ id: parseInt(route.params.id) })
     },*/    
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
-    }
   ]
 })
 
