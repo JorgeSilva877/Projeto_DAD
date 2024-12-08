@@ -66,7 +66,7 @@ const logout = () => {
           <RouterLink :to="{ name: 'login'}" :class="navigationMenuTriggerStyle()">Login</RouterLink>
         </NavigationMenuLink>
         <NavigationMenuLink v-if="storeAuth.user">
-          <RouterLink :to="{ name: 'addBalance'}" :class="navigationMenuTriggerStyle()">{{ storeAuth.userCurrentBalance }}$</RouterLink>
+          <RouterLink :to="{ name: 'addBalance'}" :class="navigationMenuTriggerStyle()">{{ storeAuth.userCurrentBalance }} BrainCoins</RouterLink>
         </NavigationMenuLink>
 
         <NavigationMenuList v-if="storeAuth.userType == 'A'">

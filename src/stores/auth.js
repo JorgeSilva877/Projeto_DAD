@@ -35,6 +35,11 @@ export const useAuthStore = defineStore('auth', () => {
     const userCurrentBalance = computed(() => {
         return user.value ? user.value.brain_coins_balance : ''
     })
+
+    const getUserById = (userId) => {
+        return user.value ? user.value.id === userId : false
+    }
+
     // This function is "private" - not exported by the store
     const clearUser = () => {
         resetIntervalToRefreshToken()
@@ -159,9 +164,17 @@ export const useAuthStore = defineStore('auth', () => {
             return false
     }
 
+    //atualizar o saldo do utilizador
+    const updateBalance = async (newBalance) => {
+        let currentBalance = userCurrentBalance.value
+        let newBalanceUser = currentBalance + newBalance
+        user.value.brain_coins_balance = newBalanceUser
+        const response = await axios.put('users/me/brain_coins_balance', { brain_coins_balance: newBalanceUser })
+        return response.data.data
+    }
 
     return {
         user, userName, userEmail, userType, userPhotoUrl, userFirstLastName, userCurrentBalance,
-        login, logout, restoreToken, register
+        getUserById,login, logout, restoreToken, register, updateBalance
     }
 })

@@ -20,6 +20,9 @@ import MyAccount from '@/components/user/MyAccount.vue'
 import GamesHistory from '@/components/user/GamesHistory.vue'
 import TransactionHistory from '@/components/user/TransactionHistory.vue'
 
+import BuyBrainCoins from '@/components/user/BuyBrainCoins.vue'
+
+
 let handlingFirstRoute = true
 
 const router = createRouter({
@@ -121,6 +124,17 @@ const router = createRouter({
         cols: 6,
       },
     },
+    {
+      path: '/transactions',
+      name: 'transactionHistory',
+      component: TransactionHistory
+    },
+    {
+      path: '/addBalance/buyBrainCoins/:coins/:euros',
+      name: 'buyBrainCoins',
+      component: BuyBrainCoins,
+      props: route => ({ coins: parseInt(route.params.coins), euros: parseInt(route.params.euros) })
+    },
     /*{
       path: '/tasks/:id',
       name: 'updateTask',
@@ -132,7 +146,7 @@ const router = createRouter({
       name: 'updateProject',
       component: ProjectUpdate,
       props: route => ({ id: parseInt(route.params.id) })
-    },*/    
+    },*/
     {
       path: '/about',
       name: 'about',
@@ -145,7 +159,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  
+
 
   const storeAuth = useAuthStore()
   if (handlingFirstRoute) {
