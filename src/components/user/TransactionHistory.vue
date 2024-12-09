@@ -15,6 +15,11 @@ onMounted(() => {
   transactionStore.fetchTransactions(currentPage);
 });
 
+const firstPage = () => {
+  currentPage = 1;
+  authStore.fetchUsers(currentPage);
+};
+
 // funcao para ir para a proxima pagina
 const nextPage = () => {
   currentPage += 1;
@@ -25,7 +30,12 @@ const nextPage = () => {
 
 const previousPage = () => {
   currentPage -= 1;
-  transactionStore.fetchTransactions(currentPage - 1);
+  transactionStore.fetchTransactions(currentPage);
+};
+
+const lastPage = () => {
+  currentPage = authStore.lastPage;
+  authStore.fetchUsers(currentPage);
 };
 
 const formatDate = (date) => {
@@ -84,12 +94,20 @@ const formatDate = (date) => {
     <!-- Botões de paginação -->
     <div class="flex justify-center space-x-4 mt-4">
       <button class="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm" :disabled="currentPage === 1"
+        @click="firstPage">
+        First Page
+      </button>
+      <button class="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm" :disabled="currentPage === 1"
         @click="previousPage">
         Previous
       </button>
       <button class="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
         :disabled="currentPage === transactionStore.lastPage" @click="nextPage">
         Next
+      </button>
+      <button class="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
+        @click="lastPage">
+        Last Page
       </button>
     </div>
   </div>
