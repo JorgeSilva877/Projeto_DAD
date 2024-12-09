@@ -1,9 +1,11 @@
 <script setup>
 
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router'
 import { useGameStore } from '@/stores/game';
 
 const storeGame = useGameStore()
+const router = useRouter()
 const gameDetails = ref(null)
 
 const props = defineProps({
@@ -15,7 +17,12 @@ const props = defineProps({
 
 onMounted(() => {
     gameDetails.value = storeGame.getGameDetail(props.id).value
+    storeGame.fetchMultiplayerGameUsersDetail(props.id)
 });
+
+const back = () => {
+    router.back()
+}
 </script>
 
 
@@ -75,10 +82,22 @@ onMounted(() => {
             <p class="text-yellow-900">{{ gameDetails.winner || 'N/A' }}</p>
           </div>
         </div>
+        <div v-if="storeGame.getMultiplayerGameUsers.length" class="mt-8">
+          <h2 class="text-2xl font-bold text-yellow-700 mb-4">Players List</h2>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div v-for="player in storeGame.getMultiplayerGameUsers" 
+                :key="player.nickname" 
+                class="bg-white p-4 rounded-lg shadow hover:shadow-lg transition">
+              <h3 class="text-lg font-semibold text-yellow-800">{{ player.nickname }}</h3>
+              <p class="text-yellow-900 mt-2">Pairs Discovered: <span class="font-medium">{{ player.pairs_discovered }}</span></p>
+            </div>
+          </div>
+        </div>
   
         <!-- Botão -->
         <div class="mt-8 flex justify-center">
-          <button @click="$router.back()" class="bg-yellow-500 text-white font-medium px-6 py-3 rounded-lg hover:bg-yellow-600 transition shadow-md">
+          <button @click="back" class="bg-yellow-500 text-white font-medium px-6 py-3 rounded-lg hover:bg-yellow-600 transition shadow-md">
             Go Back
           </button>
         </div>
