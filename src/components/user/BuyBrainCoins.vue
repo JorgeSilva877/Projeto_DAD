@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 //import { useErrorStore } from '@/stores/error';
 import { useAuthStore } from '@/stores/auth';
@@ -15,10 +15,7 @@ const router = useRouter();
 const errorStore = useErrorStore();
 
 const userId = ref(authStore.user.id);
-if (!userId.value) {
-  errorStore.setError('User is not authenticated');
-  router.push({ name: 'login' });
-}
+
 
 // Props para os valores de coins e euros
 const props = defineProps({

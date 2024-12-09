@@ -125,11 +125,6 @@ const router = createRouter({
       },
     },
     {
-      path: '/transactions',
-      name: 'transactionHistory',
-      component: TransactionHistory
-    },
-    {
       path: '/addBalance/buyBrainCoins/:coins/:euros',
       name: 'buyBrainCoins',
       component: BuyBrainCoins,
@@ -168,7 +163,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   //Routes not accessible to admins
-  if ((storeAuth.userType == 'A') && ((to.name == 'index') || (to.name == 'singleplayer') || (to.name == 'multiplayer'))) {
+  if ((storeAuth.userType == 'A') && ((to.name == 'index') || (to.name == 'singleplayer') || (to.name == 'multiplayer') || (to.name =='buyBrainCoins') || (to.name == 'addBalance'))) {
     console.log(storeAuth.type)
     next({ name: 'dashboard' })
     return
@@ -181,7 +176,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   //Routes not accessible to anonumous users
-  if ((!storeAuth.user) && ((to.name == 'dashboard') || (to.name == 'statistics'))) {
+  if ((!storeAuth.user) && ((to.name == 'dashboard') || (to.name == 'statistics') || (to.name =='buyBrainCoins') || (to.name == 'addBalance') || (to.name == 'transactionHistory'))) {
     next({ name: 'index' })
     return
   }
