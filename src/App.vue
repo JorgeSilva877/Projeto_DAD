@@ -65,7 +65,7 @@ const logout = () => {
         <NavigationMenuLink v-if="!storeAuth.user">
           <RouterLink :to="{ name: 'login'}" :class="navigationMenuTriggerStyle()">Login</RouterLink>
         </NavigationMenuLink>
-        <NavigationMenuLink v-if="storeAuth.user.type == 'P'">
+        <NavigationMenuLink v-if="storeAuth.userType == 'P'">
           <RouterLink :to="{ name: 'addBalance'}" :class="navigationMenuTriggerStyle()">{{ storeAuth.userCurrentBalance }} BrainCoins</RouterLink>
         </NavigationMenuLink>
 
@@ -102,7 +102,7 @@ const logout = () => {
                   </RouterLink>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <RouterLink v-if="storeAuth.user.type == 'P'"   :to="{ name: 'addBalance'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
+                  <RouterLink v-if="storeAuth.userType == 'P'"   :to="{ name: 'addBalance'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
                     Add brain coins
                   </RouterLink>
                 </DropdownMenuItem>

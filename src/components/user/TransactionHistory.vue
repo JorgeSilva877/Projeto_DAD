@@ -1,6 +1,9 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useTransactionStore } from '@/stores/transactionStore';
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore();
 
 const transactionStore = useTransactionStore();
 
@@ -51,6 +54,12 @@ const formatDate = (date) => {
       </div>
       <!-- Exibição da data e informações específicas -->
       <div>
+        <p v-if="authStore.userType === 'A'" class="text-sm text-gray-500">
+          User:
+          <span class="font-medium text-gray-700">
+            {{ transaction.user_id }}
+          </span>
+        </p>
         <p class="text-sm text-gray-500">
           Date:
           <span class="font-medium text-gray-700">
