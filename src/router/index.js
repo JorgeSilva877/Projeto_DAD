@@ -13,7 +13,7 @@ import Singleplayer_Board from '@/components/game/Singleplayer_Board.vue'
 
 import ScoreBoard from '@/components/scoreBoard/ScoreBoard.vue'
 
-import Dashboard from '@/components/adminTools/Dashboard.vue'
+import Dashboard from '@/components/dashboard/Dashboard.vue'
 import Statistics from '@/components/adminTools/Statistics.vue'
 import Users from '@/components/adminTools/Users.vue'
 

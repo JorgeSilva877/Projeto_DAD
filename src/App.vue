@@ -105,17 +105,17 @@ const logout = () => {
                       Profile
                     </RouterLink>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem v-if="storeAuth.userType == 'P'">
                     <RouterLink :to="{ name: 'addBalance'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
                       Add brain coins
                     </RouterLink>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem v-if="storeAuth.userType == 'P'">
                     <RouterLink :to="{ name: 'gamesHistory'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
                       Games History
                     </RouterLink>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem v-if="storeAuth.userType == 'P'">
                     <RouterLink :to="{ name: 'transactionHistory'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
                       Transaction History
                     </RouterLink>
