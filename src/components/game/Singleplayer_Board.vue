@@ -33,15 +33,15 @@ const route = useRoute();
 const gameData = ref({});
 
 
-const endGame = async() => {
+const endGame = async () => {
   gameData.value.began_at = startDate
   gameData.value.total_time = temporizador.value
   gameData.value.total_turns_winner = tentativas.value
   console.log("Dados do jogo:", gameStore.currentGame.game.id);  // Verifique a estrutura do objeto
   try {
-    const newGameData = await gameStore.endGame(gameStore.currentGame.game.id,gameData.value);
+    const newGameData = await gameStore.endGame(gameStore.currentGame.game.id, gameData.value);
     console.log('Novo jogo iniciado com sucesso:', newGameData);
-    
+
   } catch (error) {
     console.error('Erro ao iniciar o jogo:', error);
   }
@@ -71,10 +71,10 @@ watch(isGameOver, (newValue) => {
     clearInterval(timerInterval); // Para o timer
     timerInterval = null; // Limpa a referência para evitar chamadas duplicadas
     console.log('Jogo terminado! Temporizador parado.');
-    if(authStore.user) {
-    endGame()
+    if (authStore.user) {
+      endGame()
+    }
   }
-}
 });
 
 // Obtem a data atual
@@ -132,7 +132,7 @@ const handleClick = (piece) => {
     startDate = getDate()
     console.log('Temporizador iniciado:', startDate);
     timerInterval = setInterval(timer, 1000);
-    
+
   }
 
   if (processing.value) { //pa n deixar clicar enquanto ta a mostrar as 2 cartas viradas
@@ -192,8 +192,8 @@ onMounted(() => {
     gameStore.currentGame = parsedGameData;
     // Converte a string JSON de volta para um objeto
     //gameData.value = JSON.parse(route.query.gameData);
-    console.log('Game Data no Board:', gameStore.currentGame.game.id);
-    
+    console.log('Game Data no Board:', gameStore.currentGame.game);
+
   }
 })
 </script>
@@ -207,7 +207,7 @@ onMounted(() => {
         Parabéns, ganhou o jogo em {{ temporizador }} segundos e {{ tentativas }} tentativas.
       </div>
       <div class="flex items-center justify-center mt-5">
-<!--
+        <!--
         <RouterLink :to="{ name: 'singleplayer' }"
           class="ml-2 px-3 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
           
@@ -226,19 +226,20 @@ onMounted(() => {
 
         <RouterLink :to="{ name: 'index' }"
           class="ml-2 px-3 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-    <path stroke-linecap="round" stroke-linejoin="round"
-          d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
-</svg>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+          </svg>
         </RouterLink>
       </div>
     </div>
   </div>
   <div v-else>
     <div class="text-3xl text-center font-bold text-gray-700 relative font-tahoma uppercase mb-5 ">
-      
-        Tempo: {{ startTimer ? temporizador : '--'  }}
-      
+
+      Tempo: {{ startTimer ? temporizador : '--' }}
+
     </div>
     <div :style="gridStyle" class="w-full max-w-screen-md mx-auto mt-10">
       <div v-for="piece in board" :key="piece.num" @click="handleClick(piece)"
@@ -247,4 +248,5 @@ onMounted(() => {
       </div>
     </div>
   </div>
+  <br>
 </template>

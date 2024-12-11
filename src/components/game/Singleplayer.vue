@@ -4,7 +4,6 @@ import { useRoute, useRouter } from 'vue-router';
 import { useGameStore } from '@/stores/game';
 import { useAuthStore } from '@/stores/auth';
 import { useErrorStore } from '@/stores/error'
-import { toast } from '../ui/toast';
 
 const route = useRoute();
 const router = useRouter();
@@ -50,12 +49,12 @@ const handleBoardSelection = async (boardId, routeName) => {
   try {
     // Inicia um novo jogo
     const newGameData = await gameStore.startGame(gameStore.currentGame);
+    console.log('Novo jogo iniciado com sucesso:', newGameData);
     await authStore.refreshUser();
 
     // Navega para a rota do tabuleiro com os dados do jogo atualizados
     if(authStore.userCurrentBalance < 1 && gameStore.currentGame.board_id !== 1) {
-      storeError.setErrorMessages('Saldo insuficiente para jogar.');
-      //alert('Saldo insuficiente para jogar. Recarregue sua conta.');
+      storeError.setErrorMessages('Saldo insuficiente para jogar');
       return;
     }
     router.push({

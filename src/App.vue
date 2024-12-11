@@ -58,7 +58,8 @@ watch(() => storeAuth.userCurrentBalance, (newBalance) => {
 
   <Toaster />
   <GlobalAlertDialog ref="alert-dialog"></GlobalAlertDialog>
-  <div class="flex h-screen">
+  <div class="flex flex-col h-screen">
+    <div class="flex flex-1">
     <ScoreBoard></ScoreBoard>
     <div class="w-full max-w-[90%] lg:max-w-[80%] mx-auto">
     <div class="flex justify-between">
@@ -140,4 +141,5 @@ watch(() => storeAuth.userCurrentBalance, (newBalance) => {
         <p>&copy; 2024 Memory Game. All Rights Reserved.</p>
       </div>
   </footer>
+  </div>
 </template>
