@@ -1,55 +1,24 @@
 <script setup>
+import { RouterLink } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
 
+const storeAuth = useAuthStore();
 </script>
 
 <template>
-
-  <div class="flex-wrap mx-auto mt-16 grid max-w-lg grid-cols-1 items-center gap-6 sm:mt-10 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-3">
-    <div class="relative rounded-3xl bg-gray-900 p-8 shadow-2xl ring-1 ring-gray-900/10 sm:p-10 mb-4">
-      <h3 id="tier-enterprise" class="text-base/7 font-semibold text-indigo-400">Pacote Basico</h3>
-      <p class="mt-4 flex items-baseline gap-x-2">
-        <span class="text-5xl font-semibold tracking-tight text-white">1,99€</span>
-      </p>
-      <a href="#" aria-describedby="tier-enterprise" class="mt-8 block rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 sm:mt-10">Comprar</a>
+  <h1 class="text-3xl mb-2 text-center text-yellow-500 font-semibold">Add Brain Coins</h1>
+  <p class="text-lg text-gray-400 text-center mb-4">Choose your balance</p>  
+  <div class="flex flex-col items-center justify-start min-h-screen pt-16">
+    <div class="w-full max-w-[90%] lg:max-w-[80%] mx-auto">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <RouterLink  v-if="storeAuth.user" v-for="coins in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200]" :key="coins"
+          :to="{ name: 'buyBrainCoins', params: { coins: coins, euros: coins / 10 } }"
+          class="sm:w-20 sm:h-24 md:w-24 md:h-28 lg:w-36 lg:h-28 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105 flex flex-col items-center justify-center">
+          <div>{{ coins }} Brain Coins</div>
+          <div class="text-sm text-gray-300 mt-2">{{ coins / 10 }}€</div>
+        </RouterLink>
+      </div>
     </div>
-    <div class="relative rounded-3xl bg-gray-900 p-8 shadow-2xl ring-1 ring-gray-900/10 sm:p-10 mb-4">
-      <h3 id="tier-enterprise" class="text-base/7 font-semibold text-indigo-400">Pacote Iniciante</h3>
-      <p class="mt-4 flex items-baseline gap-x-2">
-        <span class="text-5xl font-semibold tracking-tight text-white">4,99€</span>
-      </p>
-      <a href="#" aria-describedby="tier-enterprise" class="mt-8 block rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 sm:mt-10">Comprar</a>
-    </div>
-    <div class="relative rounded-3xl bg-gray-900 p-8 shadow-2xl ring-1 ring-gray-900/10 sm:p-10 mb-4">
-      <h3 id="tier-enterprise" class="text-base/7 font-semibold text-indigo-400">Pacote Médio</h3>
-      <p class="mt-4 flex items-baseline gap-x-2">
-        <span class="text-5xl font-semibold tracking-tight text-white">9,99€</span>
-      </p>
-      <a href="#" aria-describedby="tier-enterprise" class="mt-8 block rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 sm:mt-10">Comprar</a>
-    </div>
-    
-    <div class="relative rounded-3xl bg-gray-900 p-8 shadow-2xl ring-1 ring-gray-900/10 sm:p-10 mb-4">
-      <h3 id="tier-enterprise" class="text-base/7 font-semibold text-indigo-400">Pacote Grande</h3>
-      <p class="mt-4 flex items-baseline gap-x-2">
-        <span class="text-5xl font-semibold tracking-tight text-white">19,99€</span>
-      </p>
-      <a href="#" aria-describedby="tier-enterprise" class="mt-8 block rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 sm:mt-10">Comprar</a>
-    </div>
-    <div class="relative rounded-3xl bg-gray-900 p-8 shadow-2xl ring-1 ring-gray-900/10 sm:p-10 mb-4">
-      <h3 id="tier-enterprise" class="text-base/7 font-semibold text-indigo-400">Pacote Extra-Grade</h3>
-      <p class="mt-4 flex items-baseline gap-x-2">
-        <span class="text-5xl font-semibold tracking-tight text-white">49,99€</span>
-      </p>
-      <a href="#" aria-describedby="tier-enterprise" class="mt-8 block rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 sm:mt-10">Comprar</a>
-    </div>
-    <div class="relative rounded-3xl bg-gray-900 p-8 shadow-2xl ring-1 ring-gray-900/10 sm:p-10 mb-4">
-      <h3 id="tier-enterprise" class="text-base/7 font-semibold text-indigo-400">Pacote FREAKKKYYY</h3>
-      <p class="mt-4 flex items-baseline gap-x-2">
-        <span class="text-5xl font-semibold tracking-tight text-white">
-        99,99€
-        </span>
-      </p>
-      <a href="#" aria-describedby="tier-enterprise" class="mt-8 block rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 sm:mt-10">Comprar</a>
-    </div>
-    
   </div>
 </template>
+

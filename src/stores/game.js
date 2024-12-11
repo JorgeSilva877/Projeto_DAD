@@ -1,10 +1,14 @@
-import { ref, computed } from 'vue'
+import { ref, computed, compile } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useErrorStore } from '@/stores/error'
+import { useToast } from '@/components/ui/toast/use-toast'
 export const useGameStore = defineStore('game', () => {
+    const { toast } = useToast()
     const storeError = useErrorStore()
+
     const currentGame  = ref(null)
+
     const multiplayerMostWins = ref(null)
     const singleplayerBestTime_BoardThreeFour = ref(null)
     const singleplayerBestTime_BoardFourFour = ref(null)
@@ -12,6 +16,10 @@ export const useGameStore = defineStore('game', () => {
     const singleplayerLessTurns_BoardThreeFour = ref(null)
     const singleplayerLessTurns_BoardFourFour = ref(null)
     const singleplayerLessTurns_BoardSixSix = ref(null)
+    const personalGames = ref(null)
+    const multiplayerGameUsers = ref(null)
+    const personalScoreBoardByTime = ref(null)
+    const personalScoreBoardByMoves = ref(null)
 
     
 
@@ -42,6 +50,27 @@ export const useGameStore = defineStore('game', () => {
     const getSinglePlayerLessTurns_BoardSixSix = computed(() => {
         return singleplayerLessTurns_BoardSixSix.value ? singleplayerLessTurns_BoardSixSix.value : []
     })
+
+    const getPersonalGames = computed(() => {
+        return personalGames.value ? personalGames.value : []
+    })
+
+    const getMultiplayerGameUsers = computed(() => {
+        return multiplayerGameUsers.value ? multiplayerGameUsers.value : []
+    })
+
+    const getPersonalScoreboardByTime = computed(() => {
+        return personalScoreBoardByTime.value ? personalScoreBoardByTime.value : []
+    })
+
+    const getPersonalScoreBoardByMoves = computed(() => {
+        return personalScoreBoardByMoves.value ? personalScoreBoardByMoves.value : []
+    })
+
+    const getGameDetail = (id) => {
+        return computed(() => personalGames.value.find(game => game.id === id));
+    };
+
 
     const fetchScoreboard = async () => {
         storeError.resetMessages()
@@ -81,6 +110,7 @@ export const useGameStore = defineStore('game', () => {
         }
     }
 
+
     
 
     const startGame = async (gameData) => {
@@ -115,9 +145,86 @@ export const useGameStore = defineStore('game', () => {
             console.error('Erro ao interromper jogo:', error);
         }
     };
+
+
+    const fetchPersonalGames = async (userId) => {
+        storeError.resetMessages()
+        try {
+            if (userId == 0) {
+                toast({
+                    description: 'Cannot load your history. Try again later.',
+                    variant: 'destructive',
+                });
+                
+                return false
+            }
+
+           //faz pedido get à API para ter todos os jogos do utilizador
+           const allPersonalGames_promise =  axios.get('game/allGames_'+userId)
+            //Atribui o resultado à variavel da store
+           personalGames.value = (await allPersonalGames_promise).data
+
+
+           return true
+
+        } catch (e) {
+            storeError.setErrorMessages(e.response.data.message, e.response.data.errors,
+                e.response.status, 'Cannot load your history. Try again later.')
+            return false
+        }
+    }
+
+    const fetchMultiplayerGameUsersDetail = async (gameId) => {
+        storeError.resetMessages()
+        try {
+            if (gameId == null) {
+                return false
+            }
+
+           //faz pedido get à API 
+           const allUsers_promise =  axios.get('game/usersDetailFrom_'+gameId)
+            //Atribui o resultado à variavel da store
+           multiplayerGameUsers.value = (await allUsers_promise).data
+
+
+           return true
+
+        } catch (e) {
+            storeError.setErrorMessages(e.response.data.message, e.response.data.errors,
+                e.response.status, 'Cannot load your history. Try again later.')
+            return false
+        }
+    }
+
+    const fetchPersonalScoreboard = async (userId) => {
+        storeError.resetMessages()
+        try {
+            if (userId == 0) {
+                return false
+            }
+
+            //faz pedido get à API 
+            const personalScoreboardByTime_promise =  axios.get('game/scoreboardByTime_'+userId)
+            const personalScoreboardByMoves_promise =  axios.get('game/scoreboardByMoves_'+userId)
+            //Atribui o resultado à variavel da store
+            personalScoreBoardByTime.value = (await personalScoreboardByTime_promise).data
+            personalScoreBoardByMoves.value = (await personalScoreboardByMoves_promise).data
+
+
+           return true
+
+        } catch (e) {
+            storeError.setErrorMessages(e.response.data.message, e.response.data.errors,
+                e.response.status, 'Cannot load your scoreboard. Try again later.')
+            return false
+        }
+    }
    
     return {
-        fetchScoreboard, getMultiplayerMostWins, getSinglePlayerBestTime_BoardThreeFour, getSinglePlayerBestTime_BoardFourFour, getSinglePlayerBestTime_BoardSixSix,
-        getSinglePlayerLessTurns_BoardThreeFour, getSinglePlayerLessTurns_BoardFourFour, getSinglePlayerLessTurns_BoardSixSix, startGame,endGame, gameInterrupted
+        fetchScoreboard, fetchPersonalGames, fetchMultiplayerGameUsersDetail, fetchPersonalScoreboard,
+        getMultiplayerMostWins, getSinglePlayerBestTime_BoardThreeFour, getSinglePlayerBestTime_BoardFourFour, getSinglePlayerBestTime_BoardSixSix,
+        getSinglePlayerLessTurns_BoardThreeFour, getSinglePlayerLessTurns_BoardFourFour, getSinglePlayerLessTurns_BoardSixSix, getPersonalGames,
+        getGameDetail, getMultiplayerGameUsers, getPersonalScoreboardByTime, getPersonalScoreBoardByMoves,gameInterrupted, endGame, startGame
+
     }
 })

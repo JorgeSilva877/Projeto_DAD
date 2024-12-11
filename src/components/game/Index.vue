@@ -79,3 +79,15 @@ function selectGameType(gameType) {
       </div>
 </template>
 
+
+  <div class="flex justify-center gap-4">
+    <RouterLink :to="{ name: 'singleplayer' }"
+      class="px-6 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
+      Singleplayer
+    </RouterLink>
+    <RouterLink :to="{ name: 'multiplayer' }"
+      class="px-6 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
+      Multiplayer
+    </RouterLink>
+  </div>
+</template>
