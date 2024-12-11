@@ -17,7 +17,7 @@ onMounted(() => {
 
 const firstPage = () => {
   currentPage = 1;
-  authStore.fetchUsers(currentPage);
+  transactionStore.fetchTransactions(currentPage);
 };
 
 // funcao para ir para a proxima pagina
@@ -34,8 +34,8 @@ const previousPage = () => {
 };
 
 const lastPage = () => {
-  currentPage = authStore.lastPage;
-  authStore.fetchUsers(currentPage);
+  currentPage = transactionStore.lastPage;
+  transactionStore.fetchTransactions(currentPage);
 };
 
 const formatDate = (date) => {
