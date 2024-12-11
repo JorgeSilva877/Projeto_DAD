@@ -91,7 +91,7 @@ onMounted(() => {
       hidden: true
     })
     if (i >= (props.rows * props.cols) / 2) { // para garantir q ha 2 cartas de cada
-      myArray.value.push(i - 6);
+      myArray.value.push(i - i);
       //console.log(myArray.value);
       continue;
     }
