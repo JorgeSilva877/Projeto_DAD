@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, useTemplateRef, provide, ref } from 'vue'
+import {watch, onMounted, useTemplateRef, provide, ref } from 'vue'
 import { RouterView } from 'vue-router'
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import GlobalAlertDialog from '@/components/common/GlobalAlertDialog.vue'
@@ -32,6 +32,7 @@ onMounted(() => {
   storeGame.fetchScoreboard();
 })
 
+const userBalance = ref(storeAuth.userCurrentBalance)
 
 const alertDialog = useTemplateRef('alert-dialog')
 provide('alertDialog', alertDialog)
@@ -47,6 +48,9 @@ const logout = () => {
     your credentials.`)
 }
 
+watch(() => storeAuth.userCurrentBalance, (newBalance) => {
+  userBalance.value = newBalance
+})
 </script>
 
 
@@ -54,7 +58,8 @@ const logout = () => {
 
   <Toaster />
   <GlobalAlertDialog ref="alert-dialog"></GlobalAlertDialog>
-  <div class="flex h-screen">
+  <div class="flex flex-col h-screen">
+    <div class="flex flex-1">
     <ScoreBoard></ScoreBoard>
     <div class="w-full max-w-[90%] lg:max-w-[80%] mx-auto">
     <div class="flex justify-between">

@@ -179,6 +179,16 @@ export const useAuthStore = defineStore('auth', () => {
             return false
     }
 
+
+    const refreshUser = async () => {
+        try {
+            const responseUser = await axios.get('users/me');
+            user.value = responseUser.data.data; // Atualiza todos os dados do usuário, incluindo o saldo
+        } catch (error) {
+            console.error('Erro ao atualizar os dados do usuário:', error);
+        }
+    };
+
     //atualizar o saldo do utilizador
     const updateBalance = async (newBalance) => {
         let currentBalance = userCurrentBalance.value
@@ -348,7 +358,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     return {
         user, userName, userEmail, userType, userPhotoUrl, userFirstLastName, userCurrentBalance, users, lastPage, userCurrentBlock, userNickname, userId,
-        getUserById,login, logout, restoreToken, register, updateBalance, fetchUsers, deleteUser, updateBlock, updateProfile, updatePassword, deleteLoggedUser
+        getUserById,login, logout, restoreToken, register, updateBalance, fetchUsers, deleteUser, updateBlock, updateProfile, updatePassword, deleteLoggedUser,refreshUser
 
     }
 })

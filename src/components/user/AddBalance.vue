@@ -22,4 +22,3 @@ const storeAuth = useAuthStore();
   </div>
 </template>
 
-

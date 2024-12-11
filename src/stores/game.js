@@ -6,6 +6,9 @@ import { useToast } from '@/components/ui/toast/use-toast'
 export const useGameStore = defineStore('game', () => {
     const { toast } = useToast()
     const storeError = useErrorStore()
+
+    const currentGame  = ref(null)
+
     const multiplayerMostWins = ref(null)
     const singleplayerBestTime_BoardThreeFour = ref(null)
     const singleplayerBestTime_BoardFourFour = ref(null)
@@ -108,6 +111,42 @@ export const useGameStore = defineStore('game', () => {
     }
 
 
+    
+
+    const startGame = async (gameData) => {
+        storeError.resetMessages()
+        try {
+            const response = await axios.post('games', gameData);
+            console.log('Jogo iniciado com sucesso:', response.data);
+            currentGame.value = response.data;
+            return response.data; // Retorna o jogo com o id gerado
+        } catch (error) {
+            console.error('Erro ao iniciar o jogo:', error);
+            
+        }
+    };
+
+    const endGame = async (gameId, gameResults) => {
+        storeError.resetMessages()
+        try {
+            const response = await axios.put(`games/${gameId}`, gameResults);
+            console.log('Jogo atualizado com sucesso:', response.data);
+        } catch (error) {
+            console.error('Erro ao atualizar o jogo:', error);
+        }
+    };
+
+    const gameInterrupted = async (gameId, status) => {
+        storeError.resetMessages()
+        try {
+            const response = await axios.put(`games/${gameId}`, status);
+            console.log('Jogo interrompido', response.data);
+        } catch (error) {
+            console.error('Erro ao interromper jogo:', error);
+        }
+    };
+
+
     const fetchPersonalGames = async (userId) => {
         storeError.resetMessages()
         try {
@@ -185,6 +224,7 @@ export const useGameStore = defineStore('game', () => {
         fetchScoreboard, fetchPersonalGames, fetchMultiplayerGameUsersDetail, fetchPersonalScoreboard,
         getMultiplayerMostWins, getSinglePlayerBestTime_BoardThreeFour, getSinglePlayerBestTime_BoardFourFour, getSinglePlayerBestTime_BoardSixSix,
         getSinglePlayerLessTurns_BoardThreeFour, getSinglePlayerLessTurns_BoardFourFour, getSinglePlayerLessTurns_BoardSixSix, getPersonalGames,
-        getGameDetail, getMultiplayerGameUsers, getPersonalScoreboardByTime, getPersonalScoreBoardByMoves
+        getGameDetail, getMultiplayerGameUsers, getPersonalScoreboardByTime, getPersonalScoreBoardByMoves,gameInterrupted, endGame, startGame
+
     }
 })
