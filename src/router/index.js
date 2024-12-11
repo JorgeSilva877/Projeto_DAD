@@ -24,6 +24,9 @@ import GameDetail from '@/components/user/GameDetail.vue'
 import TransactionHistory from '@/components/user/TransactionHistory.vue'
 import PersonalScoreboard from '@/components/user/PersonalScoreboard.vue'
 
+import BuyBrainCoins from '@/components/user/BuyBrainCoins.vue'
+
+
 let handlingFirstRoute = true
 
 const router = createRouter({
@@ -131,6 +134,12 @@ const router = createRouter({
       },
     },
     {
+      path: '/addBalance/buyBrainCoins/:coins/:euros',
+      name: 'buyBrainCoins',
+      component: BuyBrainCoins,
+      props: route => ({ coins: parseInt(route.params.coins), euros: parseInt(route.params.euros) })
+    },
+    {
       path: '/games/:id',
       name: 'gameDetail',
       component: GameDetail,
@@ -147,12 +156,20 @@ const router = createRouter({
       name: 'updateProject',
       component: ProjectUpdate,
       props: route => ({ id: parseInt(route.params.id) })
-    },*/    
+    },*/
+    {
+      path: '/about',
+      name: 'about',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/AboutView.vue')
+    }
   ]
 })
 
 router.beforeEach(async (to, from, next) => {
-  
+
 
   const storeAuth = useAuthStore()
   if (handlingFirstRoute) {
@@ -161,7 +178,8 @@ router.beforeEach(async (to, from, next) => {
   }
 
   //Routes not accessible to admins
-  if ((storeAuth.userType == 'A') && ((to.name == 'index') || (to.name == 'singleplayer') || (to.name == 'multiplayer') || (to.name == 'aboutUs') || (to.name == 'personalScoreboard'))) {
+
+  if ((storeAuth.userType == 'A') && ((to.name == 'index') || (to.name == 'singleplayer') || (to.name == 'multiplayer') || (to.name =='buyBrainCoins') || (to.name == 'addBalance') || (to.name == 'aboutUs') || (to.name == 'personalScoreboard'))) {
     console.log(storeAuth.type)
     next({ name: 'dashboard' })
     return
@@ -174,7 +192,8 @@ router.beforeEach(async (to, from, next) => {
   }
 
   //Routes not accessible to anonumous users
-  if ((!storeAuth.user) && ((to.name == 'dashboard') || (to.name == 'viewProfile') || (to.name == 'gamesHistory') || (to.name == 'personalScoreboard') || (to.name == 'gameDetail'))) {
+  if ((!storeAuth.user) && ((to.name == 'dashboard') || (to.name =='buyBrainCoins') || (to.name == 'addBalance') || (to.name == 'transactionHistory')  || (to.name == 'viewProfile') || (to.name == 'gamesHistory') || (to.name == 'personalScoreboard') || (to.name == 'gameDetail'))) {
+
     next({ name: 'index' })
     return
   }

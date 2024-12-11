@@ -10,6 +10,8 @@ export const useAuthStore = defineStore('auth', () => {
     const storeError = useErrorStore()
     const user = ref(null)
     const token = ref('')
+    const lastPage = ref([]);
+    const users = ref([]);
     const { toast } = useToast()
 
     const userId = computed(() => {
@@ -44,6 +46,15 @@ export const useAuthStore = defineStore('auth', () => {
     const userCurrentBalance = computed(() => {
         return user.value ? user.value.brain_coins_balance : ''
     })
+
+    const userCurrentBlock = computed(() => {
+        return user.value ? user.value.blocked : ''
+    })
+
+    const getUserById = (userId) => {
+        return user.value ? user.value.id === userId : false
+    }
+
     // This function is "private" - not exported by the store
     const clearUser = () => {
         resetIntervalToRefreshToken()
@@ -168,6 +179,69 @@ export const useAuthStore = defineStore('auth', () => {
             return false
     }
 
+    //atualizar o saldo do utilizador
+    const updateBalance = async (newBalance) => {
+        let currentBalance = userCurrentBalance.value
+        let newBalanceUser = currentBalance + newBalance
+        user.value.brain_coins_balance = newBalanceUser
+        const response = await axios.put('users/me/brain_coins_balance', { brain_coins_balance: newBalanceUser })
+        return response.data.data
+    }
+
+    //listar todos os users
+
+    const fetchUsers = async (page) => {
+        storeError.resetMessages();
+        const response = await axios.get(`users?page=${page}`);
+        users.value = response.data.data;
+        lastPage.value = response.data.meta.last_page;
+        return response.data.data;
+        
+    }
+
+    const deleteUser = async (userId) => {
+        storeError.resetMessages();
+        try {
+            const response = await axios.delete(`users/${userId}`);
+            const index = users.value.findIndex(user => user.id === userId);
+            if(index > -1){
+                users.value.splice(index, 1);
+            }
+            return response.data.data;
+        } catch (error) {
+            storeError.setErrorMessages('Failed to delete user:', error);
+            console.log(error);
+            return false;
+        }
+    }
+
+    //funcao dar update do block
+    const updateBlock = async (userId) => {
+        try {
+            // Localiza o índice do usuário na lista
+            const userIndex = users.value.findIndex((u) => u.id === userId);
+            if (userIndex === -1) {
+                throw new Error("Usuário não encontrado na lista.");
+            }
+    
+            // Obtém o status atual do usuário
+            const currentBlockStatus = users.value[userIndex].blocked;
+    
+            // Faz a chamada para atualizar no backend
+            const response = await axios.put(`users/${userId}/blocked`, {
+                blocked: !currentBlockStatus,
+            });
+    
+            // Atualiza o estado do usuário na lista
+            users.value[userIndex] = response.data.data;
+    
+            return response.data.data;
+        } catch (error) {
+            console.error("Erro ao atualizar o status de bloqueio do usuário:", error);
+            throw error;
+        }
+    };
+    
 
     const updateProfile = async (userData) => {
         storeError.resetMessages()
@@ -273,7 +347,8 @@ export const useAuthStore = defineStore('auth', () => {
 
 
     return {
-        user, userName, userEmail, userType, userPhotoUrl, userFirstLastName, userCurrentBalance, userNickname, userId,
-        login, logout, restoreToken, register, updateProfile, updatePassword, deleteLoggedUser
+        user, userName, userEmail, userType, userPhotoUrl, userFirstLastName, userCurrentBalance, users, lastPage, userCurrentBlock, userNickname, userId,
+        getUserById,login, logout, restoreToken, register, updateBalance, fetchUsers, deleteUser, updateBlock, updateProfile, updatePassword, deleteLoggedUser
+
     }
 })

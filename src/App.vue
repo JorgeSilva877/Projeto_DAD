@@ -54,25 +54,23 @@ const logout = () => {
 
   <Toaster />
   <GlobalAlertDialog ref="alert-dialog"></GlobalAlertDialog>
-  <div class="flex flex-col h-screen">
-    <div class="flex flex-1">
-      <ScoreBoard></ScoreBoard>
-      <div class="w-full max-w-[90%] lg:max-w-[80%] mx-auto">
-      <div class="flex justify-between">
-        <RouterLink :to="storeAuth.userType == 'A' ? '/dashboard' : '/'">
-            <h1 class="memory-title">Memory Game</h1>
-        </RouterLink>
-        <NavigationMenu>
-          <NavigationMenuLink v-if="!(storeAuth.userType == 'A')">
+  <div class="flex h-screen">
+    <ScoreBoard></ScoreBoard>
+    <div class="w-full max-w-[90%] lg:max-w-[80%] mx-auto">
+    <div class="flex justify-between">
+      <RouterLink :to="storeAuth.userType == 'A' ? '/dashboard' : '/'">
+          <h1 class="memory-title">Memory Game</h1>
+      </RouterLink>
+      <NavigationMenu>
+         <NavigationMenuLink v-if="!(storeAuth.userType == 'A')">
             <RouterLink :to="{ name: 'aboutUs'}" :class="navigationMenuTriggerStyle()">About us</RouterLink>
-          </NavigationMenuLink>
-          <NavigationMenuLink v-if="!storeAuth.user">
-            <RouterLink :to="{ name: 'login'}" :class="navigationMenuTriggerStyle()">Login</RouterLink>
-          </NavigationMenuLink>
-          <NavigationMenuLink v-if="storeAuth.userType == 'P'">
-            <RouterLink :to="{ name: 'addBalance'}" :class="navigationMenuTriggerStyle()">{{ storeAuth.userCurrentBalance }}$</RouterLink>
-          </NavigationMenuLink>
-
+        </NavigationMenuLink>
+        <NavigationMenuLink v-if="!storeAuth.user">
+          <RouterLink :to="{ name: 'login'}" :class="navigationMenuTriggerStyle()">Login</RouterLink>
+        </NavigationMenuLink>
+        <NavigationMenuLink v-if="storeAuth.userType == 'P'">
+          <RouterLink :to="{ name: 'addBalance'}" :class="navigationMenuTriggerStyle()">{{ storeAuth.userCurrentBalance }} BrainCoins</RouterLink>
+        </NavigationMenuLink>
           <NavigationMenuList v-if="storeAuth.userType == 'A'">
             <NavigationMenuItem>
               <DropdownMenu v-if="storeAuth.user">
@@ -91,7 +89,6 @@ const logout = () => {
               </DropdownMenu>
             </NavigationMenuItem>
           </NavigationMenuList>
-
           <NavigationMenuList>
             <NavigationMenuItem>
               <DropdownMenu v-if="storeAuth.user">
@@ -105,11 +102,11 @@ const logout = () => {
                       Profile
                     </RouterLink>
                   </DropdownMenuItem>
-                  <DropdownMenuItem v-if="storeAuth.userType == 'P'">
-                    <RouterLink :to="{ name: 'addBalance'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
-                      Add brain coins
-                    </RouterLink>
-                  </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <RouterLink v-if="storeAuth.userType == 'P'"   :to="{ name: 'addBalance'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
+                    Add brain coins
+                  </RouterLink>
+                </DropdownMenuItem>
                   <DropdownMenuItem v-if="storeAuth.userType == 'P'">
                     <RouterLink :to="{ name: 'gamesHistory'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
                       Games History
