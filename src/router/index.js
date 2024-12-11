@@ -13,7 +13,7 @@ import Singleplayer_Board from '@/components/game/Singleplayer_Board.vue'
 
 import ScoreBoard from '@/components/scoreBoard/ScoreBoard.vue'
 
-import Dashboard from '@/components/adminTools/Dashboard.vue'
+import Dashboard from '@/components/dashboard/Dashboard.vue'
 import Statistics from '@/components/adminTools/Statistics.vue'
 import Users from '@/components/adminTools/Users.vue'
 
@@ -22,6 +22,7 @@ import ViewProfile from '@/components/user/ViewProfile.vue'
 import GamesHistory from '@/components/user/GamesHistory.vue'
 import GameDetail from '@/components/user/GameDetail.vue'
 import TransactionHistory from '@/components/user/TransactionHistory.vue'
+import PersonalScoreboard from '@/components/user/PersonalScoreboard.vue'
 
 let handlingFirstRoute = true
 
@@ -135,6 +136,12 @@ const router = createRouter({
       component: GameDetail,
       props: route => ({ id: parseInt(route.params.id) })
     },
+    {
+      path: '/gamesHistory/scoreboard/:id',
+      name: 'personalScoreboard',
+      component: PersonalScoreboard,
+      props: route => ({ id: parseInt(route.params.id) })
+    },
     /*{
       path: '/projects/:id',
       name: 'updateProject',
@@ -154,7 +161,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   //Routes not accessible to admins
-  if ((storeAuth.userType == 'A') && ((to.name == 'index') || (to.name == 'singleplayer') || (to.name == 'multiplayer') || (to.name == 'aboutUs'))) {
+  if ((storeAuth.userType == 'A') && ((to.name == 'index') || (to.name == 'singleplayer') || (to.name == 'multiplayer') || (to.name == 'aboutUs') || (to.name == 'personalScoreboard'))) {
     console.log(storeAuth.type)
     next({ name: 'dashboard' })
     return
@@ -167,7 +174,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   //Routes not accessible to anonumous users
-  if ((!storeAuth.user) && ((to.name == 'dashboard') || (to.name == 'viewProfile'))) {
+  if ((!storeAuth.user) && ((to.name == 'dashboard') || (to.name == 'viewProfile') || (to.name == 'gamesHistory') || (to.name == 'personalScoreboard') || (to.name == 'gameDetail'))) {
     next({ name: 'index' })
     return
   }

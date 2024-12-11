@@ -6,10 +6,12 @@ import { useAuthStore } from '@/stores/auth';
 
 const storeGame = useGameStore()
 const storeAuth = useAuthStore()
+const G_userID = ref(null);
 
 onMounted(() => {
   const userID = storeAuth.userId
   storeGame.fetchPersonalGames(userID);
+  G_userID.value = userID;
 })
 
 
@@ -31,12 +33,11 @@ const filteredGames = computed(() => {
       <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold text-yellow-800">Game History</h1>
         <div v-if="storeGame.getPersonalGames.length > 0" class="flex gap-4">
-          <button class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow hover:bg-yellow-600 transition">
-            Personal Scoreboard
-          </button>
-          <button class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow hover:bg-yellow-600 transition">
-            Statistics
-          </button>
+          <RouterLink :to="'/gamesHistory/scoreboard/'+G_userID">
+            <button class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow hover:bg-yellow-600 transition">
+              Personal Scoreboard
+            </button>
+          </RouterLink>
         </div>
       </div>
 
