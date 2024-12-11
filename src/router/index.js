@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
+import AboutUs from '@/components/app/AboutUs.vue'
+
 import Login from '@/components/auth/Login.vue'
 import Register from '@/components/auth/Register.vue'
 
@@ -11,14 +13,16 @@ import Singleplayer_Board from '@/components/game/Singleplayer_Board.vue'
 
 import ScoreBoard from '@/components/scoreBoard/ScoreBoard.vue'
 
-import Dashboard from '@/components/adminTools/Dashboard.vue'
+import Dashboard from '@/components/dashboard/Dashboard.vue'
 import Statistics from '@/components/adminTools/Statistics.vue'
 import Users from '@/components/adminTools/Users.vue'
 
 import AddBalance from '@/components/user/AddBalance.vue'
-import MyAccount from '@/components/user/MyAccount.vue'
+import ViewProfile from '@/components/user/ViewProfile.vue'
 import GamesHistory from '@/components/user/GamesHistory.vue'
+import GameDetail from '@/components/user/GameDetail.vue'
 import TransactionHistory from '@/components/user/TransactionHistory.vue'
+import PersonalScoreboard from '@/components/user/PersonalScoreboard.vue'
 
 import BuyBrainCoins from '@/components/user/BuyBrainCoins.vue'
 
@@ -32,6 +36,11 @@ const router = createRouter({
       path: '/',
       name: 'index',
       component: Index
+    },
+    {
+      path: '/aboutUs',
+      name: 'aboutUs',
+      component: AboutUs
     },
     {
       path: '/index',
@@ -58,9 +67,9 @@ const router = createRouter({
       component: AddBalance
     },
     {
-      path: '/myAccount',
-      name: 'myAccount',
-      component: MyAccount
+      path: '/viewProfile',
+      name: 'viewProfile',
+      component: ViewProfile
     },
     {
       path: '/scoreBoard',
@@ -80,7 +89,7 @@ const router = createRouter({
     {
       path: '/gamesHistory',
       name: 'gamesHistory',
-      component: GamesHistory
+      component: GamesHistory,
     },
     {
       path: '/transactionHistory',
@@ -130,13 +139,19 @@ const router = createRouter({
       component: BuyBrainCoins,
       props: route => ({ coins: parseInt(route.params.coins), euros: parseInt(route.params.euros) })
     },
-    /*{
-      path: '/tasks/:id',
-      name: 'updateTask',
-      component: TaskUpdate,
+    {
+      path: '/games/:id',
+      name: 'gameDetail',
+      component: GameDetail,
       props: route => ({ id: parseInt(route.params.id) })
     },
     {
+      path: '/gamesHistory/scoreboard/:id',
+      name: 'personalScoreboard',
+      component: PersonalScoreboard,
+      props: route => ({ id: parseInt(route.params.id) })
+    },
+    /*{
       path: '/projects/:id',
       name: 'updateProject',
       component: ProjectUpdate,
@@ -163,7 +178,8 @@ router.beforeEach(async (to, from, next) => {
   }
 
   //Routes not accessible to admins
-  if ((storeAuth.userType == 'A') && ((to.name == 'index') || (to.name == 'singleplayer') || (to.name == 'multiplayer') || (to.name =='buyBrainCoins') || (to.name == 'addBalance'))) {
+
+  if ((storeAuth.userType == 'A') && ((to.name == 'index') || (to.name == 'singleplayer') || (to.name == 'multiplayer') || (to.name =='buyBrainCoins') || (to.name == 'addBalance') || (to.name == 'aboutUs') || (to.name == 'personalScoreboard'))) {
     console.log(storeAuth.type)
     next({ name: 'dashboard' })
     return
@@ -176,7 +192,8 @@ router.beforeEach(async (to, from, next) => {
   }
 
   //Routes not accessible to anonumous users
-  if ((!storeAuth.user) && ((to.name == 'dashboard') || (to.name == 'statistics') || (to.name =='buyBrainCoins') || (to.name == 'addBalance') || (to.name == 'transactionHistory'))) {
+  if ((!storeAuth.user) && ((to.name == 'dashboard') || (to.name =='buyBrainCoins') || (to.name == 'addBalance') || (to.name == 'transactionHistory')  || (to.name == 'viewProfile') || (to.name == 'gamesHistory') || (to.name == 'personalScoreboard') || (to.name == 'gameDetail'))) {
+
     next({ name: 'index' })
     return
   }
