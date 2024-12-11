@@ -2,6 +2,7 @@
 import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute } from 'vue-router';
 import { useGameStore } from '@/stores/game';
+import { useAuthStore } from '@/stores/auth';
 
 
 // Ir buscar qual é o tabuleiro que o utilizador escolheu
@@ -18,6 +19,7 @@ const props = defineProps({
 
 // Cria um array reativo para armazenar os estados das cartas
 const board = ref([])
+const authStore = useAuthStore();
 
 
 // Cria um contador reativo para armazenar o número de cliques
@@ -54,7 +56,6 @@ const startTimer = ref(false)
 let timerInterval = null
 
 let startDate = null
-let endDate = null
 // Computed para verificar se o jogo terminou
 const isGameOver = computed(() => {
   return board.value.every(card => !card.hidden) // Todas as cartas viradas?
@@ -70,9 +71,10 @@ watch(isGameOver, (newValue) => {
     clearInterval(timerInterval); // Para o timer
     timerInterval = null; // Limpa a referência para evitar chamadas duplicadas
     console.log('Jogo terminado! Temporizador parado.');
-    endDate = getDate()
+    if(authStore.user) {
     endGame()
   }
+}
 });
 
 // Obtem a data atual
@@ -93,41 +95,6 @@ function getDate() {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-const resetGame = () => {
-  // Limpa o tabuleiro
-  board.value = [];
-  myArray.value = [];
-
-  // Reinicia o contador de cliques e as tentativas
-  contadorDeClicks.value = 0;
-  tentativas.value = 0;
-
-  // Reinicia o temporizador
-  temporizador.value = 0;
-  startTimer.value = false;
-
-  // Embaralha as cartas novamente
-  for (let i = 0; i < props.rows * props.cols; i++) {
-    board.value.push({
-      num: i,
-      hidden: true
-    });
-    if (i >= (props.rows * props.cols) / 2) {
-      myArray.value.push(i - 6);
-      continue;
-    }
-    myArray.value.push(i);
-  }
-
-  myArray.value = myArray.value.sort(() => Math.random() - 0.5);
-
-  // Reseta o estado da data de início e fim
-  startDate = null;
-  endDate = null;
-
-  // Reinicia o estado de jogo
-  processing.value = false;
-}
 
 
 // Função para virar as cartas ao 2 click e verificar se são iguais
@@ -162,8 +129,10 @@ const handleClick = (piece) => {
   // Iniciar o temporizador
   if (!startTimer.value) {
     startTimer.value = true
-    timerInterval = setInterval(timer, 1000);
     startDate = getDate()
+    console.log('Temporizador iniciado:', startDate);
+    timerInterval = setInterval(timer, 1000);
+    
   }
 
   if (processing.value) { //pa n deixar clicar enquanto ta a mostrar as 2 cartas viradas
@@ -209,7 +178,7 @@ onMounted(() => {
       hidden: true
     })
     if (i >= (props.rows * props.cols) / 2) { // para garantir q ha 2 cartas de cada
-      myArray.value.push(i - 6);
+      myArray.value.push(i - (props.rows * props.cols) / 2);
       //console.log(myArray.value);
       continue;
     }

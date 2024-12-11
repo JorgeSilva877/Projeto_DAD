@@ -8,8 +8,8 @@ import { useAuthStore } from '@/stores/auth';
 const authStore = useAuthStore();
 
 
-const gameData = ref({
-  created_user_id: authStore.user?.id  || null,  // Exemplo: ID do usuário criador
+const gameData = ref(authStore.user?.id ?{
+  created_user_id: authStore.user.id, 
   winner_user_id: '',
   type: '',
   status: '',
@@ -21,22 +21,30 @@ const gameData = ref({
   created_at: '',
   updated_at: '',
   total_turns_winner: ''
-});
+}: null);
 
 const router = useRouter();
 
 function selectGameType(gameType) {
   // Atualiza gameData com o tipo selecionado
-  gameData.value.type = gameType;
+  if (gameData.value) {
+    gameData.value.type = gameType; // Se estiver logado, atualiza o tipo
+  }
   
   // Passar os dados ao navegar para o Singleplayer, agora como query params
   if (gameType === 'S') {
-    // Enviando gameData como JSON string nos query params
-    router.push({ 
-      name: 'singleplayer', 
-      query: { gameData: JSON.stringify(gameData.value) }
-    });
+    // Se o usuário estiver logado, envia os dados
+    if (authStore.user?.id) {
+      router.push({
+        name: 'singleplayer',
+        query: { gameData: JSON.stringify(gameData.value) }
+      });
+    } else {
+      // Se não estiver logado, apenas vai para o singleplayer sem dados
+      router.push({ name: 'singleplayer' });
+    }
   } else if (gameType === 'M') {
+    // Se for multiplayer, pode ir sem dados (mesmo para anônimos)
     router.push({ name: 'multiplayer' });
   }
 }
@@ -46,7 +54,16 @@ function selectGameType(gameType) {
       <h1 class="text-4xl mb-2 text-center">Lets Play!</h1>
       <p class="text-xl text-gray-600 text-center mb-4">Choose your game mode</p>
   
-      <div class="flex justify-center gap-4">
+      <div v-if="!authStore.user" class="flex justify-center gap-4">
+        <RouterLink 
+          :to="{ name: 'singleplayer' }" 
+          @click.prevent="selectGameType('S')"
+          class="px-6 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
+          Singleplayer
+        </RouterLink>
+        
+      </div>
+      <div v-else class="flex justify-center gap-4">
         <RouterLink 
           :to="{ name: 'singleplayer' }" 
           @click.prevent="selectGameType('S')"

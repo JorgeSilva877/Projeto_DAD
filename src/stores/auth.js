@@ -159,9 +159,17 @@ export const useAuthStore = defineStore('auth', () => {
             return false
     }
 
+    const refreshUser = async () => {
+        try {
+            const responseUser = await axios.get('users/me');
+            user.value = responseUser.data.data; // Atualiza todos os dados do usuário, incluindo o saldo
+        } catch (error) {
+            console.error('Erro ao atualizar os dados do usuário:', error);
+        }
+    };
 
     return {
         user, userName, userEmail, userType, userPhotoUrl, userFirstLastName, userCurrentBalance,
-        login, logout, restoreToken, register
+        login, logout, restoreToken, register, refreshUser
     }
 })

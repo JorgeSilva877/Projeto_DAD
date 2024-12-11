@@ -92,6 +92,7 @@ export const useGameStore = defineStore('game', () => {
             return response.data; // Retorna o jogo com o id gerado
         } catch (error) {
             console.error('Erro ao iniciar o jogo:', error);
+            
         }
     };
 
@@ -104,9 +105,19 @@ export const useGameStore = defineStore('game', () => {
             console.error('Erro ao atualizar o jogo:', error);
         }
     };
+
+    const gameInterrupted = async (gameId, status) => {
+        storeError.resetMessages()
+        try {
+            const response = await axios.put(`games/${gameId}`, status);
+            console.log('Jogo interrompido', response.data);
+        } catch (error) {
+            console.error('Erro ao interromper jogo:', error);
+        }
+    };
    
     return {
         fetchScoreboard, getMultiplayerMostWins, getSinglePlayerBestTime_BoardThreeFour, getSinglePlayerBestTime_BoardFourFour, getSinglePlayerBestTime_BoardSixSix,
-        getSinglePlayerLessTurns_BoardThreeFour, getSinglePlayerLessTurns_BoardFourFour, getSinglePlayerLessTurns_BoardSixSix, startGame,endGame
+        getSinglePlayerLessTurns_BoardThreeFour, getSinglePlayerLessTurns_BoardFourFour, getSinglePlayerLessTurns_BoardSixSix, startGame,endGame, gameInterrupted
     }
 })

@@ -2,19 +2,25 @@
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useGameStore } from '@/stores/game';
+import { useAuthStore } from '@/stores/auth';
+import { useErrorStore } from '@/stores/error'
+import { toast } from '../ui/toast';
 
 const route = useRoute();
 const router = useRouter();
-
+const authStore = useAuthStore();
+const storeError = useErrorStore()
 const gameStore = useGameStore();
 
 // Quando o componente for montado, analisa os dados da query e define o gameData
 onMounted(() => {
-  if (route.query.gameData) {
-    // Converte a string JSON de volta para um objeto e atualiza o estado global
-    const parsedGameData = JSON.parse(route.query.gameData);
-    gameStore.currentGame = parsedGameData;
-    console.log('Game Data recebido em Singleplayer:', gameStore.currentGame);
+  if(authStore.user) {
+    if (route.query.gameData) {
+      // Converte a string JSON de volta para um objeto e atualiza o estado global
+      const parsedGameData = JSON.parse(route.query.gameData);
+      gameStore.currentGame = parsedGameData;
+      console.log('Game Data recebido em Singleplayer:', gameStore.currentGame);
+    }
   }
 });
 
@@ -44,26 +50,40 @@ const handleBoardSelection = async (boardId, routeName) => {
   try {
     // Inicia um novo jogo
     const newGameData = await gameStore.startGame(gameStore.currentGame);
+    await authStore.refreshUser();
 
     // Navega para a rota do tabuleiro com os dados do jogo atualizados
+    if(authStore.userCurrentBalance < 1 && gameStore.currentGame.board_id !== 1) {
+      storeError.setErrorMessages('Saldo insuficiente para jogar.');
+      //alert('Saldo insuficiente para jogar. Recarregue sua conta.');
+      return;
+    }
     router.push({
       name: routeName,
       query: { gameData: JSON.stringify(newGameData) },
     });
   }catch (error) {
     console.error('Erro ao iniciar o jogo:', error);
-    alert('Ocorreu um erro ao iniciar o jogo. Tente novamente.');
+    alert(error.message || 'Erro ao iniciar o jogo. Tente novamente.');
   }
 };
 </script>
 
 <template>
-  <div class="flex justify-center gap-4">
+  <div v-if="!authStore.user" class="flex justify-center gap-4">
+    <RouterLink 
+          :to="{ name: 'singleplayer_3x4' }" 
+          class="px-6 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
+          3x4
+        </RouterLink>
+  </div>
+  <div v-else class="flex justify-center gap-4">
     <button 
       @click="handleBoardSelection(1, 'singleplayer_3x4')"
+      
       class="px-6 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
       3x4
-    </button>
+    </button>  
     <button 
       @click="handleBoardSelection(2, 'singleplayer_4x4')"
       class="px-6 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
