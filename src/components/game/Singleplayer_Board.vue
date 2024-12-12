@@ -37,10 +37,9 @@ const endGame = async () => {
   gameData.value.began_at = startDate
   gameData.value.total_time = temporizador.value
   gameData.value.total_turns_winner = tentativas.value
-  console.log("Dados do jogo:", gameStore.currentGame.game.id);  // Verifique a estrutura do objeto
+  console.log("Dados do jogo:", gameData.value);  // Verifique a estrutura do objeto
   try {
-    const newGameData = await gameStore.endGame(gameStore.currentGame.game.id, gameData.value);
-    console.log('Novo jogo iniciado com sucesso:', newGameData);
+    await gameStore.endGame(gameStore.currentGame.id , gameData.value);
 
   } catch (error) {
     console.error('Erro ao iniciar o jogo:', error);
@@ -58,11 +57,13 @@ let timerInterval = null
 let startDate = null
 // Computed para verificar se o jogo terminou
 const isGameOver = computed(() => {
+  console.log('tempo1' , temporizador.value);
   return board.value.every(card => !card.hidden) // Todas as cartas viradas?
 });
 // Função para contar o tempo
 const timer = () => {
   temporizador.value++
+  console.log('Tempo:', temporizador.value);
 }
 
 // Watcher para parar o contador quando o jogo terminar
@@ -207,23 +208,6 @@ onMounted(() => {
         Parabéns, ganhou o jogo em {{ temporizador }} segundos e {{ tentativas }} tentativas.
       </div>
       <div class="flex items-center justify-center mt-5">
-        <!--
-        <RouterLink :to="{ name: 'singleplayer' }"
-          class="ml-2 px-3 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
-          
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-            stroke="currentColor" class="size-6"></svg>
-
-        </RouterLink>
-        <div @click="resetGame"
-          class="mr-2 px-3 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-            stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
-          </svg>
-        </div>-->
-
         <RouterLink :to="{ name: 'index' }"
           class="ml-2 px-3 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"

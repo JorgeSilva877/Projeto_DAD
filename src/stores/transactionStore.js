@@ -40,7 +40,7 @@ export const useTransactionStore = defineStore('transaction', () => {
         return transactions.value.findIndex(transaction => transaction.id === transactionId);
     }
     
-    const insertTransactionBuyBrainCoins = async (transaction) => {
+    const insertTransaction = async (transaction) => {
         storeError.resetMessages();
         try {
             const response = await axios.post('transactions', transaction);
@@ -54,11 +54,12 @@ export const useTransactionStore = defineStore('transaction', () => {
             return null;
         }
     }
+
     return {
         transactions,
         lastPage,
         fetchTransactions,
         getIndexOfTransaction,
-        insertTransactionBuyBrainCoins
+        insertTransaction
     }
 });

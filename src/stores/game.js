@@ -7,7 +7,7 @@ export const useGameStore = defineStore('game', () => {
     const { toast } = useToast()
     const storeError = useErrorStore()
 
-    const currentGame  = ref(null)
+    const currentGame  = ref([])
 
     const multiplayerMostWins = ref(null)
     const singleplayerBestTime_BoardThreeFour = ref(null)
@@ -21,7 +21,10 @@ export const useGameStore = defineStore('game', () => {
     const personalScoreBoardByTime = ref(null)
     const personalScoreBoardByMoves = ref(null)
 
-    
+
+    const getCurrentGameId = computed(() => {
+        return currentGame.value ? currentGame.value.id : null
+    })
 
     const getMultiplayerMostWins = computed(() => {
         return multiplayerMostWins.value ? multiplayerMostWins.value : []
@@ -66,6 +69,7 @@ export const useGameStore = defineStore('game', () => {
     const getPersonalScoreBoardByMoves = computed(() => {
         return personalScoreBoardByMoves.value ? personalScoreBoardByMoves.value : []
     })
+    
 
     const getGameDetail = (id) => {
         return computed(() => personalGames.value.find(game => game.id === id));
@@ -110,16 +114,14 @@ export const useGameStore = defineStore('game', () => {
         }
     }
 
-
-    
-
     const startGame = async (gameData) => {
         storeError.resetMessages()
         try {
             const response = await axios.post('games', gameData);
-            console.log('Jogo iniciado com sucesso:', response.data);
-            currentGame.value = response.data;
-            return response.data; // Retorna o jogo com o id gerado
+            console.log('Jogo iniciado com sucesso:', response.data.data);
+            currentGame.value.push(response.data.data);
+            console.log('currentGame:', currentGame.value);
+            return response.data.data; // Retorna o jogo com o id gerado
         } catch (error) {
             console.error('Erro ao iniciar o jogo:', error);
             
@@ -221,7 +223,7 @@ export const useGameStore = defineStore('game', () => {
     }
    
     return {
-        fetchScoreboard, fetchPersonalGames, fetchMultiplayerGameUsersDetail, fetchPersonalScoreboard,
+        fetchScoreboard, fetchPersonalGames, fetchMultiplayerGameUsersDetail, fetchPersonalScoreboard, getCurrentGameId,
         getMultiplayerMostWins, getSinglePlayerBestTime_BoardThreeFour, getSinglePlayerBestTime_BoardFourFour, getSinglePlayerBestTime_BoardSixSix,
         getSinglePlayerLessTurns_BoardThreeFour, getSinglePlayerLessTurns_BoardFourFour, getSinglePlayerLessTurns_BoardSixSix, getPersonalGames,
         getGameDetail, getMultiplayerGameUsers, getPersonalScoreboardByTime, getPersonalScoreBoardByMoves,gameInterrupted, endGame, startGame

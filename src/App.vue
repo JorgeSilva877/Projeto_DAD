@@ -125,9 +125,9 @@ watch(() => storeAuth.userCurrentBalance, (newBalance) => {
     </div>
     </div>
     <footer class="bg-yellow-600 text-white py-4 mt-auto">
-        <div class="text-center">
-          <p>&copy; 2024 Memory Game. All Rights Reserved.</p>
-        </div>
+      <div class="text-center">
+        <p>&copy; 2024 Memory Game. All Rights Reserved.</p>
+      </div>
     </footer>
-  </div>  
+  </div>
 </template>

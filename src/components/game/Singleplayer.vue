@@ -4,12 +4,40 @@ import { useRoute, useRouter } from 'vue-router';
 import { useGameStore } from '@/stores/game';
 import { useAuthStore } from '@/stores/auth';
 import { useErrorStore } from '@/stores/error'
+import { useTransactionStore } from '@/stores/transactionStore';
+import { format } from 'date-fns';
 
 const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
 const storeError = useErrorStore()
 const gameStore = useGameStore();
+const transactionStore = useTransactionStore();
+
+const transaction = ref({
+  type: 'I', 
+  transaction_datetime: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+  user_id: authStore.user.id,
+  game_id: null,
+  euros: null,
+  payment_type: null,
+  payment_reference: null,
+  brain_coins: '',
+  custom: JSON.stringify({}),
+});
+
+const game = ref({
+  type : 'S',
+  created_user_id : authStore.user.id,
+  winner_user_id : null,
+  status : null,
+  began_at : null,
+  ended_at : null,
+  board_id : null,
+  total_time : null,
+  board_id : null,
+
+});
 
 // Quando o componente for montado, analisa os dados da query e define o gameData
 onMounted(() => {
@@ -45,18 +73,32 @@ const handleBoardSelection = async (boardId, routeName) => {
   gameStore.currentGame.board_id = boardId;
   gameStore.currentGame.created_at = getDate();
   gameStore.currentGame.status = "PL"; // P para "Playing"
+
+  game.value.board_id = boardId;
+  game.value.status = "PL";
+
   
   try {
     // Inicia um novo jogo
-    const newGameData = await gameStore.startGame(gameStore.currentGame);
+    const newGameData = await gameStore.startGame(game.value);
     console.log('Novo jogo iniciado com sucesso:', newGameData);
     await authStore.refreshUser();
 
+    const gameId = newGameData.id;
+    if(boardId !==1) {
+      transaction.value.brain_coins = -1;
+      //console.log('gameId', newGameData.id);
+      transaction.value.game_id = gameId;
+      //console.log('gameid:', transaction.value.game_id);
+      transactionStore.insertTransaction(transaction.value);
+    }
     // Navega para a rota do tabuleiro com os dados do jogo atualizados
     if(authStore.userCurrentBalance < 1 && gameStore.currentGame.board_id !== 1) {
       storeError.setErrorMessages('Saldo insuficiente para jogar');
       return;
     }
+    gameStore.currentGame = newGameData;
+
     router.push({
       name: routeName,
       query: { gameData: JSON.stringify(newGameData) },

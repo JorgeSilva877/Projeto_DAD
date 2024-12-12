@@ -8,8 +8,8 @@ import { useAuthStore } from '@/stores/auth';
 const authStore = useAuthStore();
 
 
-const gameData = ref(authStore.user?.id ?{
-  created_user_id: authStore.user.id, 
+const gameData = ref(authStore.user?.id ? {
+  created_user_id: authStore.user.id,
   winner_user_id: '',
   type: '',
   status: '',
@@ -21,7 +21,7 @@ const gameData = ref(authStore.user?.id ?{
   created_at: '',
   updated_at: '',
   total_turns_winner: ''
-}: null);
+} : null);
 
 const router = useRouter();
 
@@ -30,7 +30,7 @@ function selectGameType(gameType) {
   if (gameData.value) {
     gameData.value.type = gameType; // Se estiver logado, atualiza o tipo
   }
-  
+
   // Passar os dados ao navegar para o Singleplayer, agora como query params
   if (gameType === 'S') {
     // Se o usuário estiver logado, envia os dados
@@ -53,7 +53,7 @@ function selectGameType(gameType) {
 <template>
   <div class="min-h-screen flex flex-col justify-start items-center p-6 pt-20">
     <h1 class="text-5xl font-bold text-yellow-600 mb-4 animate-bounce">Let’s Play!</h1>
-    
+
     <p class="text-lg text-yellow-800 mb-8">Choose your game mode</p>
 
     <div class="flex gap-6 mb-12">

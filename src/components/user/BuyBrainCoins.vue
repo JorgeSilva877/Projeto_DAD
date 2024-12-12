@@ -72,7 +72,7 @@ const createTransaction = async () => {
     transaction.value.payment_reference = paypalEmail.value;
   }
   // Tentar inserir a transação
-  if (await transactionStore.insertTransactionBuyBrainCoins(transaction.value)) {
+  if (await transactionStore.insertTransaction(transaction.value)) {
     router.push({ name: 'dashboard' });
   }
 };
