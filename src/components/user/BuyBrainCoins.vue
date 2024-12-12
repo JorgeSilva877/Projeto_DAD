@@ -141,7 +141,7 @@ const selectMethod = (paymentType) => {
       <label class="block mb-2 text-gray-600">Phone Number:</label>
       <input v-model="mbwayPhoneNumber" type="text" class="w-full p-2 border rounded"
         placeholder="Enter your phone number">
-        <ErrorMessage :errorMessage="storeError.fieldMessage('payment_reference')"></ErrorMessage>
+      <ErrorMessage :errorMessage="storeError.fieldMessage('payment_reference')"></ErrorMessage>
     </div>
 
     <div v-if="transaction.payment_type === 'MB'"
@@ -149,6 +149,7 @@ const selectMethod = (paymentType) => {
       <h2 class="text-2xl mb-2 text-gray-600">MB Payment</h2>
       <label class="block mb-2 text-gray-600">Entity-Reference:</label>
       <p class="w-full p-2 border rounded bg-gray-200">{{ mbReference }}</p>
+      <ErrorMessage :errorMessage="storeError.fieldMessage('payment_reference')"></ErrorMessage>
     </div>
 
     <div v-if="transaction.payment_type === 'VISA'"
@@ -157,19 +158,23 @@ const selectMethod = (paymentType) => {
       <label class="block mb-2 text-gray-600">Card Number:</label>
       <input v-model="visaCardNumber" type="text" class="w-full p-2 border rounded"
         placeholder="Enter your card number">
+      <ErrorMessage :errorMessage="storeError.fieldMessage('payment_reference')"></ErrorMessage>
     </div>
 
     <div v-if="transaction.payment_type === 'IBAN'"
       class="mt-4 p-4 bg-gray-100 rounded-lg shadow-md w-full max-w-md mx-auto border-2 border-yellow-300">
       <h2 class="text-2xl mb-2 text-gray-600">IBAN Payment</h2>
       <label class="block mb-2 text-gray-600">IBAN:</label>
-      <input v-model="ibanNumber" type="text" class="w-full p-2 border rounded" placeholder="Enter your IBAN">
+      <input v-model="ibanNumber" type="text" class="w-full p-2 border rounded" 
+        placeholder="Enter your IBAN">
+      <ErrorMessage :errorMessage="storeError.fieldMessage('payment_reference')"></ErrorMessage>
     </div>
     <div v-if="transaction.payment_type === 'PAYPAL'"
       class="mt-4 p-4 bg-gray-100 rounded-lg shadow-md w-full max-w-md mx-auto border-2 border-yellow-300">
       <h2 class="text-2xl mb-2 text-gray-600">PAYPAL Payment</h2>
       <label class="block mb-2 text-gray-600">Email:</label>
       <input v-model="paypalEmail" type="text" class="w-full p-2 border rounded" placeholder="Enter your paypal email">
+      <ErrorMessage :errorMessage="storeError.fieldMessage('payment_reference')"></ErrorMessage>
 
     </div>
 
