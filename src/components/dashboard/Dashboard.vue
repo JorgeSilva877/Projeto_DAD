@@ -125,7 +125,12 @@ const playedGamesGoal = ref(100000);
           
           <div class="flex justify-between mt-2">
             <div v-for="item in storeStatistics.getTransactionsStats.playersWithMostMoneyDeposited" :key="item.nickname" class="text-center text-sm text-yellow-600">
-              {{ item.nickname }} ({{ item.total_spent }}€)
+              {{ item.nickname }}
+            </div>
+          </div>
+          <div class="flex justify-between mt-0">
+            <div v-for="item in storeStatistics.getTransactionsStats.playersWithMostMoneyDeposited" :key="item.nickname" class="text-center text-sm text-yellow-600">
+              {{ item.total_spent }}€
             </div>
           </div>
         </div>

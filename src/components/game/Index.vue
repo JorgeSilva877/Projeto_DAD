@@ -51,43 +51,37 @@ function selectGameType(gameType) {
 </script>
 
 <template>
-      <h1 class="text-4xl mb-2 text-center">Lets Play!</h1>
-      <p class="text-xl text-gray-600 text-center mb-4">Choose your game mode</p>
-  
-      <div v-if="!authStore.user" class="flex justify-center gap-4">
-        <RouterLink 
-          :to="{ name: 'singleplayer' }" 
-          @click.prevent="selectGameType('S')"
-          class="px-6 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
-          Singleplayer
-        </RouterLink>
-        
-      </div>
-      <div v-else class="flex justify-center gap-4">
-        <RouterLink 
-          :to="{ name: 'singleplayer' }" 
-          @click.prevent="selectGameType('S')"
-          class="px-6 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
-          Singleplayer
-        </RouterLink>
-        <RouterLink 
-          :to="{ name: 'multiplayer' }" 
-          @click.prevent="selectGameType('M')"
-          class="px-6 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
-          Multiplayer
-        </RouterLink>
-      </div>
-</template>
+  <div class="min-h-screen flex flex-col justify-start items-center p-6 pt-20">
+    <h1 class="text-5xl font-bold text-yellow-600 mb-4 animate-bounce">Let’s Play!</h1>
+    
+    <p class="text-lg text-yellow-800 mb-8">Choose your game mode</p>
 
+    <div class="flex gap-6 mb-12">
+      <RouterLink 
+        :to="{ name: 'singleplayer' }" 
+        @click.prevent="selectGameType('S')"
+        class="px-8 py-4 text-xl font-semibold text-yellow-50 bg-yellow-500 rounded-full shadow-md hover:bg-yellow-400 transform hover:scale-110 transition-all">
+        Singleplayer
+      </RouterLink>
 
-  <div class="flex justify-center gap-4">
-    <RouterLink :to="{ name: 'singleplayer' }"
-      class="px-6 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
-      Singleplayer
-    </RouterLink>
-    <RouterLink :to="{ name: 'multiplayer' }"
-      class="px-6 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
-      Multiplayer
-    </RouterLink>
+      <RouterLink 
+        v-if="authStore.user"
+        :to="{ name: 'multiplayer' }" 
+        @click.prevent="selectGameType('M')"
+        class="px-8 py-4 text-xl font-semibold text-yellow-50 bg-yellow-500 rounded-full shadow-md hover:bg-yellow-400 transform hover:scale-110 transition-all">
+        Multiplayer
+      </RouterLink>
+    </div>
+
+    <br><br>
+
+    <div class="w-full max-w-3xl bg-yellow-100 p-8 rounded-lg shadow-md">
+      <h2 class="text-2xl font-bold text-yellow-600 mb-4">How to Play</h2>
+      <ul class="list-disc list-inside text-yellow-800 space-y-2">
+        <li>Click on cards to reveal them.</li>
+        <li>Match pairs of identical cards.</li>
+        <li>Complete the game in the shortest time possible!</li>
+      </ul>
+    </div>
   </div>
 </template>

@@ -76,24 +76,6 @@ watch(() => storeAuth.userCurrentBalance, (newBalance) => {
         <NavigationMenuLink v-if="storeAuth.userType == 'P'">
           <RouterLink :to="{ name: 'addBalance'}" :class="navigationMenuTriggerStyle()">{{ storeAuth.userCurrentBalance }} BrainCoins</RouterLink>
         </NavigationMenuLink>
-          <NavigationMenuList v-if="storeAuth.userType == 'A'">
-            <NavigationMenuItem>
-              <DropdownMenu v-if="storeAuth.user">
-                <DropdownMenuTrigger :class="navigationMenuTriggerStyle()">
-                  Admin tools
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  class="bg-white shadow-lg rounded-md p-2 w-40" >
-                  <DropdownMenuItem>
-                    <RouterLink :to="{ name: 'users'}" :class="navigationMenuTriggerStyle()">Users</RouterLink>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <RouterLink :to="{ name: 'statistics'}" :class="navigationMenuTriggerStyle()">Statistics</RouterLink>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </NavigationMenuItem>
-          </NavigationMenuList>
           <NavigationMenuList>
             <NavigationMenuItem>
               <DropdownMenu v-if="storeAuth.user">
@@ -117,7 +99,12 @@ watch(() => storeAuth.userCurrentBalance, (newBalance) => {
                       Games History
                     </RouterLink>
                   </DropdownMenuItem>
-                  <DropdownMenuItem v-if="storeAuth.userType == 'P'">
+                  <DropdownMenuItem v-if="storeAuth.userType == 'A'">
+                    <RouterLink :to="{ name: 'users'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
+                      Users
+                    </RouterLink>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
                     <RouterLink :to="{ name: 'transactionHistory'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
                       Transaction History
                     </RouterLink>

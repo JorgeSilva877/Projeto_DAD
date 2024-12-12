@@ -338,7 +338,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const deleteLoggedUser = async () => {
         try {
-            const responseDelete = await axios.delete('user/'+user.value.id)
+            const responseDelete = await axios.delete('users/'+user.value.id)
             
             clearUser()
             router.push({ name: 'login' })

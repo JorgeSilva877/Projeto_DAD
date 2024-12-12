@@ -68,30 +68,37 @@ const handleBoardSelection = async (boardId, routeName) => {
 };
 </script>
 
+
 <template>
-  <div v-if="!authStore.user" class="flex justify-center gap-4">
-    <RouterLink 
-          :to="{ name: 'singleplayer_3x4' }" 
-          class="px-6 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
-          3x4
-        </RouterLink>
-  </div>
-  <div v-else class="flex justify-center gap-4">
-    <button 
-      @click="handleBoardSelection(1, 'singleplayer_3x4')"
+  <div class="min-h-screen flex flex-col justify-start items-center p-6 pt-20">
+    <h1 class="text-5xl font-bold text-yellow-600 mb-8">Choose Your Board</h1>
+
+    <div v-if="!authStore.user" class="flex justify-center gap-8">
+      <RouterLink 
+        :to="{ name: 'singleplayer_3x4' }" 
+        class="px-8 py-4 text-xl font-semibold text-yellow-50 bg-yellow-500 rounded-lg shadow-lg hover:bg-yellow-400 transform hover:-translate-y-1 hover:scale-105 transition-all">
+        3x4
+      </RouterLink>
+    </div>
+
+    <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+      <button 
+        @click="handleBoardSelection(1, 'singleplayer_3x4')"
+        class="px-8 py-4 text-xl font-semibold text-yellow-50 bg-yellow-500 rounded-lg shadow-lg hover:bg-yellow-400 transform hover:-translate-y-1 hover:scale-105 transition-all">
+        3x4
+      </button>  
       
-      class="px-6 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
-      3x4
-    </button>  
-    <button 
-      @click="handleBoardSelection(2, 'singleplayer_4x4')"
-      class="px-6 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
-      4x4
-    </button>
-    <button 
-      @click="handleBoardSelection(3, 'singleplayer_6x6')"
-      class="px-6 py-3 text-lg font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-400 transition-transform transform hover:scale-105">
-      6x6
-    </button>
+      <button 
+        @click="handleBoardSelection(2, 'singleplayer_4x4')"
+        class="px-8 py-4 text-xl font-semibold text-yellow-50 bg-yellow-500 rounded-lg shadow-lg hover:bg-yellow-400 transform hover:-translate-y-1 hover:scale-105 transition-all">
+        4x4
+      </button>
+      
+      <button 
+        @click="handleBoardSelection(3, 'singleplayer_6x6')"
+        class="px-8 py-4 text-xl font-semibold text-yellow-50 bg-yellow-500 rounded-lg shadow-lg hover:bg-yellow-400 transform hover:-translate-y-1 hover:scale-105 transition-all">
+        6x6
+      </button>
+    </div>
   </div>
 </template>
