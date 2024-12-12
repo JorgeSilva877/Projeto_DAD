@@ -1,10 +1,11 @@
-import { ref, computed } from 'vue'
+import { ref, computed, inject } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useErrorStore } from '@/stores/error'
 import { useRouter } from 'vue-router'
 import avatarNoneAssetURL from '@/assets/avatar-none.png'
 import { useToast } from '@/components/ui/toast/use-toast'
+
 export const useAuthStore = defineStore('auth', () => {
     const router = useRouter()
     const storeError = useErrorStore()
@@ -13,6 +14,7 @@ export const useAuthStore = defineStore('auth', () => {
     const lastPage = ref([]);
     const users = ref([]);
     const { toast } = useToast()
+    const socket = inject('socket')
 
     const userId = computed(() => {
         return user.value ? user.value.id : 0
@@ -27,6 +29,12 @@ export const useAuthStore = defineStore('auth', () => {
         const lastName = names.length > 1 ? names[names.length - 1] : ''
         return (firstName + ' ' + lastName).trim()
     })
+    const getFirstLastName = (fullName) => {
+        const names = fullName.trim().split(' ')
+        const firstName = names[0] ?? ''
+        const lastName = names.length > 1 ? names[names.length -1 ] : ''
+        return (firstName + ' ' + lastName).trim()
+    }
     const userEmail = computed(() => {
         return user.value ? user.value.email : ''
     })
@@ -58,6 +66,9 @@ export const useAuthStore = defineStore('auth', () => {
     // This function is "private" - not exported by the store
     const clearUser = () => {
         resetIntervalToRefreshToken()
+        if (user.value) {
+            socket.emit('logout', user.value) 
+        }
         user.value = null
         user.value = ''
         localStorage.removeItem('token')
@@ -73,6 +84,7 @@ export const useAuthStore = defineStore('auth', () => {
             axios.defaults.headers.common.Authorization = 'Bearer ' + token.value
             const responseUser = await axios.get('users/me')
             user.value = responseUser.data.data
+            socket.emit('login', user.value) 
             repeatRefreshToken()
             if(user.value.type == 'A'){
                 router.push({ name: 'dashboard' })
@@ -169,6 +181,7 @@ export const useAuthStore = defineStore('auth', () => {
             axios.defaults.headers.common.Authorization = 'Bearer ' + token.value
             const responseUser = await axios.get('users/me')
             user.value = responseUser.data.data
+            socket.emit('login', user.value) 
             repeatRefreshToken()
             return true
         } catch {
@@ -357,7 +370,7 @@ export const useAuthStore = defineStore('auth', () => {
 
 
     return {
-        user, userName, userEmail, userType, userPhotoUrl, userFirstLastName, userCurrentBalance, users, lastPage, userCurrentBlock, userNickname, userId,
+        user, userName, userEmail, userType, userPhotoUrl, userFirstLastName, userCurrentBalance, users, lastPage, userCurrentBlock, userNickname, userId, getFirstLastName,
         getUserById,login, logout, restoreToken, register, updateBalance, fetchUsers, deleteUser, updateBlock, updateProfile, updatePassword, deleteLoggedUser,refreshUser
 
     }
