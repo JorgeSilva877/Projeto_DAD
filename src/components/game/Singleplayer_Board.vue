@@ -40,6 +40,7 @@ const endGame = async () => {
   console.log("Dados do jogo:", gameData.value);  // Verifique a estrutura do objeto
   try {
     await gameStore.endGame(gameStore.currentGame.id , gameData.value);
+    gameStore.fetchScoreboard();
 
   } catch (error) {
     console.error('Erro ao iniciar o jogo:', error);
