@@ -1,10 +1,11 @@
 <script setup>
-import {watch, onMounted, useTemplateRef, provide, ref } from 'vue'
+import {watch, onMounted, useTemplateRef, provide, ref, inject } from 'vue'
 import { RouterView } from 'vue-router'
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import GlobalAlertDialog from '@/components/common/GlobalAlertDialog.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useGameStore } from '@/stores/game'
+import { useChatStore } from '@/stores/chat' 
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,13 +25,37 @@ import {
 } from '@/components/ui/navigation-menu'
 import { navigationMenuTriggerStyle } from '@/components/ui/navigation-menu'
 import ScoreBoard from './components/scoreBoard/ScoreBoard.vue'
+import GlobalInputDialog from './components/common/GlobalInputDialog.vue' 
 
 const storeAuth = useAuthStore()
 const storeGame = useGameStore()
 
+const storeChat = useChatStore() 
+const socket = inject('socket') 
+
 onMounted(() => {
   storeGame.fetchScoreboard();
 })
+
+const inputDialog = useTemplateRef('input-dialog') //da 40 ate a 59
+provide('inputDialog', inputDialog)
+
+let userDestination = null
+socket.on('privateMessage', (messageObj) => {
+  userDestination = messageObj.user
+  inputDialog.value.open(
+    handleMessageFromInputDialog,
+    'Message from ' + messageObj.user.name,
+    `This is a private message sent by ${messageObj?.user?.name}!`,
+    'Reply Message', '',
+    'Close', 'Reply',
+    messageObj.message
+  )
+})
+
+const handleMessageFromInputDialog = (message) => {
+ storeChat.sendPrivateMessageToUser(userDestination, message)
+}
 
 const userBalance = ref(storeAuth.userCurrentBalance)
 
@@ -58,6 +83,7 @@ watch(() => storeAuth.userCurrentBalance, (newBalance) => {
 
   <Toaster />
   <GlobalAlertDialog ref="alert-dialog"></GlobalAlertDialog>
+  <GlobalInputDialog ref="input-dialog"></GlobalInputDialog>
   <div class="flex flex-col h-screen">
     <div class="flex flex-1">
     <ScoreBoard></ScoreBoard>
@@ -125,9 +151,9 @@ watch(() => storeAuth.userCurrentBalance, (newBalance) => {
     </div>
     </div>
     <footer class="bg-yellow-600 text-white py-4 mt-auto">
-      <div class="text-center">
-        <p>&copy; 2024 Memory Game. All Rights Reserved.</p>
-      </div>
+        <div class="text-center">
+          <p>&copy; 2024 Memory Game. All Rights Reserved.</p>
+        </div>
     </footer>
-  </div>
+  </div>  
 </template>
