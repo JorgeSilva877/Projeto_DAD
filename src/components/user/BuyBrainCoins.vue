@@ -12,7 +12,7 @@ const authStore = useAuthStore();
 //const errorStore = useErrorStore();
 const transactionStore = useTransactionStore();
 const router = useRouter();
-const errorStore = useErrorStore();
+const storeError = useErrorStore();
 
 const userId = ref(authStore.user.id);
 
@@ -141,6 +141,7 @@ const selectMethod = (paymentType) => {
       <label class="block mb-2 text-gray-600">Phone Number:</label>
       <input v-model="mbwayPhoneNumber" type="text" class="w-full p-2 border rounded"
         placeholder="Enter your phone number">
+        <ErrorMessage :errorMessage="storeError.fieldMessage('payment_reference')"></ErrorMessage>
     </div>
 
     <div v-if="transaction.payment_type === 'MB'"

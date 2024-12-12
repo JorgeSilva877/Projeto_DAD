@@ -49,8 +49,11 @@ export const useTransactionStore = defineStore('transaction', () => {
             toast({ description: 'Transaction created successfully!' });
             return response.data.data;
         } catch (error) {
-            storeError.setErrorMessages('Failed to create transaction:', error);
-            console.log(error);
+            //console.log(error.response.data.message)
+            //storeError.setErrorMessages('Failed to create transaction:'+error.response.data.message);
+            console.log(error.response.data.errors);
+            storeError.setErrorMessages(error.response.data.message, error.response.data.errors,
+                error.response.status, 'Failed to create transaction')
             return null;
         }
     }
