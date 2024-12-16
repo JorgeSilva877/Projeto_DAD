@@ -9,9 +9,13 @@ const storeAuth = useAuthStore()
 const G_userID = ref(null);
 
 onMounted(() => {
-  const userID = storeAuth.userId
-  storeGame.fetchPersonalGames(userID);
-  G_userID.value = userID;
+  if(storeAuth.userType === 'A') {
+    storeGame.fetchGames();
+  }else{
+    const userID = storeAuth.userId
+    storeGame.fetchPersonalGames(userID);
+    G_userID.value = userID;
+  }
 })
 
 
@@ -19,9 +23,9 @@ onMounted(() => {
 const filterType = ref('');
 const filteredGames = computed(() => {
   if (filterType.value === '') {
-    return storeGame.getPersonalGames;
+    return storeAuth.userType == 'P' ? storeGame.getPersonalGames : storeGame.getAllGames;
   }
-  return storeGame.getPersonalGames.filter(game => game.type === filterType.value);
+  return storeAuth.userType == 'P' ? storeGame.getPersonalGames.filter(game => game.type === filterType.value) : storeGame.getAllGames.filter(game => game.type === filterType.value);
 });
 
 </script>
@@ -32,7 +36,7 @@ const filteredGames = computed(() => {
       <!-- Titulo + Botoes -->
       <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold text-yellow-800">Game History</h1>
-        <div v-if="storeGame.getPersonalGames.length > 0" class="flex gap-4">
+        <div v-if="storeAuth.userType == 'P' && storeGame.getPersonalGames.length > 0" class="flex gap-4">
           <RouterLink :to="'/gamesHistory/scoreboard/'+G_userID">
             <button class="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow hover:bg-yellow-600 transition">
               Personal Scoreboard
@@ -68,7 +72,7 @@ const filteredGames = computed(() => {
                   <th class="py-3 px-4 text-center text-yellow-800">Board</th>
                   <th class="py-3 px-4 text-center text-yellow-800">Status</th>
                   <th class="py-3 px-4 text-center text-yellow-800">Game Time</th>
-                  <th class="py-3 px-4 text-center text-yellow-800">Total Turns</th>
+                  <th class="py-3 px-4 text-center text-yellow-800">{{ storeAuth.userType == 'P' ? 'Total Turns' : 'Winner' }} </th>
                   <th class="py-3 px-4 text-center text-yellow-800">Actions</th>
                 </tr>
               </thead>
@@ -83,7 +87,8 @@ const filteredGames = computed(() => {
                                                           game.status == 'PE' ? 'Pending' : 
                                                           'Playing'}}</td>
                   <td class="py-3 px-4 text-yellow-800">{{ game.gameTime == null ? 'N/A' :  game.gameTime}}</td>
-                  <td class="py-3 px-4 text-yellow-800">{{ game.total_turns == null ? 'N/A' : game.total_turns }}</td>
+                  <td v-if="storeAuth.userType == 'P'" class="py-3 px-4 text-yellow-800">{{ game.total_turns == null ? 'N/A' : game.total_turns }}</td>
+                  <td v-else class="py-3 px-4 text-yellow-800">{{ game.winner == null ? game.creator : game.winner }}</td>
                   <!-- Icon -->
                   <td class="py-3 px-4 text-center">
                     <RouterLink :to="{  name: 'gameDetail', params: { id: game.id } }" >

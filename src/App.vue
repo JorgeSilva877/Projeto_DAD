@@ -120,7 +120,7 @@ watch(() => storeAuth.userCurrentBalance, (newBalance) => {
                     Add brain coins
                   </RouterLink>
                 </DropdownMenuItem>
-                  <DropdownMenuItem v-if="storeAuth.userType == 'P'">
+                  <DropdownMenuItem v-if="storeAuth">
                     <RouterLink :to="{ name: 'gamesHistory'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
                       Games History
                     </RouterLink>

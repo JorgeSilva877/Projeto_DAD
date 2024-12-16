@@ -20,6 +20,7 @@ export const useGameStore = defineStore('game', () => {
     const multiplayerGameUsers = ref(null)
     const personalScoreBoardByTime = ref(null)
     const personalScoreBoardByMoves = ref(null)
+    const games = ref(null)
 
 
     const getCurrentGameId = computed(() => {
@@ -69,11 +70,16 @@ export const useGameStore = defineStore('game', () => {
     const getPersonalScoreBoardByMoves = computed(() => {
         return personalScoreBoardByMoves.value ? personalScoreBoardByMoves.value : []
     })
+
+    const getAllGames = computed(() => {
+        return games.value ? games.value : []
+    })
     
 
     const getGameDetail = (id) => {
-        return computed(() => personalGames.value.find(game => game.id === id));
+        return personalGames.value == null ? computed(() => games.value.find(game => game.id === id)) : computed(() => personalGames.value.find(game => game.id === id));
     };
+
 
 
     const fetchScoreboard = async () => {
@@ -110,6 +116,22 @@ export const useGameStore = defineStore('game', () => {
         } catch (e) {
             storeError.setErrorMessages(e.response.data.message, e.response.data.errors,
                 e.response.status, 'Cannot load scoreboard!')
+            return false
+        }
+    }
+
+    const fetchGames = async () => {
+        storeError.resetMessages()
+        try {
+            //faz pedido get à API para ter todos os jogos do utilizador
+           const allGamesPromise =  axios.get('game/allGames')
+            //Atribui o resultado à variavel da store
+           games.value = (await allGamesPromise).data
+           return true
+
+        } catch (e) {
+            storeError.setErrorMessages(e.response.data.message, e.response.data.errors,
+                e.response.status, 'Cannot load your history. Try again later.')
             return false
         }
     }
@@ -223,10 +245,10 @@ export const useGameStore = defineStore('game', () => {
     }
    
     return {
-        fetchScoreboard, fetchPersonalGames, fetchMultiplayerGameUsersDetail, fetchPersonalScoreboard, getCurrentGameId,
+        fetchScoreboard, fetchPersonalGames, fetchMultiplayerGameUsersDetail, fetchPersonalScoreboard, getCurrentGameId, fetchGames,
         getMultiplayerMostWins, getSinglePlayerBestTime_BoardThreeFour, getSinglePlayerBestTime_BoardFourFour, getSinglePlayerBestTime_BoardSixSix,
         getSinglePlayerLessTurns_BoardThreeFour, getSinglePlayerLessTurns_BoardFourFour, getSinglePlayerLessTurns_BoardSixSix, getPersonalGames,
-        getGameDetail, getMultiplayerGameUsers, getPersonalScoreboardByTime, getPersonalScoreBoardByMoves,gameInterrupted, endGame, startGame
+        getGameDetail, getMultiplayerGameUsers, getPersonalScoreboardByTime, getPersonalScoreBoardByMoves,gameInterrupted, endGame, startGame, getAllGames
 
     }
 })

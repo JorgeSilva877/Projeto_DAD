@@ -3,8 +3,10 @@
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router'
 import { useGameStore } from '@/stores/game';
+import { useAuthStore } from '@/stores/auth';
 
 const storeGame = useGameStore()
+const storeAuth = useAuthStore()
 const router = useRouter()
 const gameDetails = ref(null)
 
@@ -73,7 +75,7 @@ const back = () => {
             <h2 class="font-semibold text-yellow-700">Pairs Discovered</h2>
             <p class="text-yellow-900">{{ gameDetails.total_pairs_discovered || 'N/A' }}</p>
           </div>
-          <div v-if="gameDetails.type === 'M'">
+          <div v-if="gameDetails.type === 'M' || storeAuth.userType == 'A'">
             <h2 class="font-semibold text-yellow-700">Game Creator Nickname</h2>
             <p class="text-yellow-900">{{ gameDetails.creator || 'N/A' }}</p>
           </div>
