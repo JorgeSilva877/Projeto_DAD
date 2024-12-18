@@ -47,7 +47,7 @@ const back = () => {
           </div>
           <div>
             <h2 class="font-semibold text-yellow-700">Board:</h2>
-            <p class="text-yellow-900">{{ gameDetails.board }}</p>
+            <p class="text-yellow-900">{{ storeAuth.userType == 'P' ? gameDetails.board : gameDetails.board_id == 1 ? '3x4' : gameDetails.board_id == 2 ? '4x4' : '6x6' }}</p>
           </div>
           <div>
             <h2 class="font-semibold text-yellow-700">Status:</h2>
@@ -69,7 +69,7 @@ const back = () => {
           </div>
           <div>
             <h2 class="font-semibold text-yellow-700">{{ gameDetails.type === 'S' ? 'Total Turns:' : 'Total Winner Turns:'}}</h2>
-            <p class="text-yellow-900">{{ gameDetails.total_turns || 'N/A' }}</p>
+            <p class="text-yellow-900">{{ (storeAuth.userType == 'P' ? gameDetails.total_turns : gameDetails.total_turns_winner) || 'N/A' }}</p>
           </div>
           <div v-if="gameDetails.type === 'M'">
             <h2 class="font-semibold text-yellow-700">Pairs Discovered</h2>
@@ -77,11 +77,11 @@ const back = () => {
           </div>
           <div v-if="gameDetails.type === 'M' || storeAuth.userType == 'A'">
             <h2 class="font-semibold text-yellow-700">Game Creator Nickname</h2>
-            <p class="text-yellow-900">{{ gameDetails.creator || 'N/A' }}</p>
+            <p class="text-yellow-900">{{ (storeAuth.userType == 'P'?  gameDetails.creator : gameDetails.created_by.name) || 'N/A' }}</p>
           </div>
           <div v-if="gameDetails.type === 'M'">
             <h2 class="font-semibold text-yellow-700">Winner Nickname</h2>
-            <p class="text-yellow-900">{{ gameDetails.winner || 'N/A' }}</p>
+            <p class="text-yellow-900">{{ (storeAuth.userType == 'P'?  gameDetails.winner : gameDetails.winner.name) || 'N/A' }}</p>
           </div>
         </div>
         <div v-if="storeGame.getMultiplayerGameUsers.length" class="mt-8">

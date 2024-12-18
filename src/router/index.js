@@ -25,6 +25,7 @@ import TransactionHistory from '@/components/user/TransactionHistory.vue'
 import PersonalScoreboard from '@/components/user/PersonalScoreboard.vue'
 
 import BuyBrainCoins from '@/components/user/BuyBrainCoins.vue'
+import GamesHistoryAdmin from '@/components/user/GamesHistoryAdmin.vue'
 
 
 let handlingFirstRoute = true
@@ -90,6 +91,11 @@ const router = createRouter({
       path: '/gamesHistory',
       name: 'gamesHistory',
       component: GamesHistory,
+    },
+    {
+      path: '/games',
+      name: 'games',
+      component: GamesHistoryAdmin,
     },
     {
       path: '/transactionHistory',

@@ -121,7 +121,7 @@ watch(() => storeAuth.userCurrentBalance, (newBalance) => {
                   </RouterLink>
                 </DropdownMenuItem>
                   <DropdownMenuItem v-if="storeAuth">
-                    <RouterLink :to="{ name: 'gamesHistory'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
+                    <RouterLink :to="{ name: storeAuth.userType == 'P' ? 'gamesHistory' : 'games'}" class="w-full text-left text-gray-700 hover:text-black hover:bg-gray-100 px-2 py-1 rounded">
                       Games History
                     </RouterLink>
                   </DropdownMenuItem>

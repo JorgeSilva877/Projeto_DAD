@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useErrorStore } from '@/stores/error'
 import { useToast } from '@/components/ui/toast/use-toast'
-export const useGameStore = defineStore('game', () => {
+export const useGameStore = defineStore('games', () => {
     const { toast } = useToast()
     const storeError = useErrorStore()
 
@@ -21,7 +21,13 @@ export const useGameStore = defineStore('game', () => {
     const personalScoreBoardByTime = ref(null)
     const personalScoreBoardByMoves = ref(null)
     const games = ref(null)
-
+    const page = ref(1)
+    const filters = ref({
+        type: '',
+        status: '',
+        sort_by: 'created_at',
+        sort_direction: 'desc'
+    })
 
     const getCurrentGameId = computed(() => {
         return currentGame.value ? currentGame.value.id : null
@@ -119,7 +125,7 @@ export const useGameStore = defineStore('game', () => {
             return false
         }
     }
-
+    /*
     const fetchGames = async () => {
         storeError.resetMessages()
         try {
@@ -134,7 +140,7 @@ export const useGameStore = defineStore('game', () => {
                 e.response.status, 'Cannot load your history. Try again later.')
             return false
         }
-    }
+    }*/
 
     const startGame = async (gameData) => {
         storeError.resetMessages()
@@ -243,12 +249,53 @@ export const useGameStore = defineStore('game', () => {
             return false
         }
     }
+
+
+    //AQUI
+    const totalGames = computed(() => games.value?.length)
+
+    const resetPage = () => {
+        page.value = 1
+        games.value = null
+      }
+    
+      const fetchGames = async (resetPagination = false) => {
+        if (resetPagination) {
+          resetPage()
+        }
+    
+        const queryParams = new URLSearchParams({
+          page: page.value,
+          ...(filters.value.type && { type: filters.value.type }),
+          ...(filters.value.status && { status: filters.value.status }),
+          sort_by: filters.value.sort_by,
+          sort_direction: filters.value.sort_direction
+        }).toString()
+    
+        const response = await axios.get(`/game/allGames?${queryParams}`)
+    
+        if (page.value === 1 || resetPagination) {
+          games.value = response.data.data
+        } else {
+          games.value = [...(games.value || []), ...response.data.data]
+        }
+    
+        return response.data
+      }
+    
+      const fetchGamesNextPage = async () => {
+        page.value++
+        await fetchGames()
+      }
+
+      //ATE AQUI
    
     return {
         fetchScoreboard, fetchPersonalGames, fetchMultiplayerGameUsersDetail, fetchPersonalScoreboard, getCurrentGameId, fetchGames,
         getMultiplayerMostWins, getSinglePlayerBestTime_BoardThreeFour, getSinglePlayerBestTime_BoardFourFour, getSinglePlayerBestTime_BoardSixSix,
         getSinglePlayerLessTurns_BoardThreeFour, getSinglePlayerLessTurns_BoardFourFour, getSinglePlayerLessTurns_BoardSixSix, getPersonalGames,
-        getGameDetail, getMultiplayerGameUsers, getPersonalScoreboardByTime, getPersonalScoreBoardByMoves,gameInterrupted, endGame, startGame, getAllGames
+        getGameDetail, getMultiplayerGameUsers, getPersonalScoreboardByTime, getPersonalScoreBoardByMoves,gameInterrupted, endGame, startGame, getAllGames,
+        fetchGamesNextPage, games, totalGames, filters, page, fetchGames, resetPage
 
     }
 })
