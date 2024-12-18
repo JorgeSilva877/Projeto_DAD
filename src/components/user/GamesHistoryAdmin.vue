@@ -30,6 +30,12 @@ const handleFiltersChange = async () => {
         await fetchData(true);
 }
 
+const loadMore = async () => {
+    loading.value = true
+    await storeGame.fetchGamesNextPage()
+    loading.value = false
+}
+
 </script>
 
 <template>
@@ -100,7 +106,7 @@ const handleFiltersChange = async () => {
           </tbody>
         </table>
         <div class="flex justify-center mt-4">
-          <button @click="handleFiltersChange" :disabled="loading" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">
+          <button @click="loadMore" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">
             Load More
           </button>
         </div>
