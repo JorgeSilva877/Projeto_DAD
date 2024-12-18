@@ -65,13 +65,13 @@ const back = () => {
           </div>
           <div>
             <h2 class="font-semibold text-yellow-700">Game Time:</h2>
-            <p class="text-yellow-900">{{ gameDetails.gameTime || 'N/A' }}</p>
+            <p class="text-yellow-900">{{ (storeAuth.userType == 'P' ? gameDetails.gameTime : gameDetails.total_time) || 'N/A' }}</p>
           </div>
           <div>
             <h2 class="font-semibold text-yellow-700">{{ gameDetails.type === 'S' ? 'Total Turns:' : 'Total Winner Turns:'}}</h2>
             <p class="text-yellow-900">{{ (storeAuth.userType == 'P' ? gameDetails.total_turns : gameDetails.total_turns_winner) || 'N/A' }}</p>
           </div>
-          <div v-if="gameDetails.type === 'M'">
+          <div v-if="gameDetails.type === 'M' && storeAuth.userType == 'P'">
             <h2 class="font-semibold text-yellow-700">Pairs Discovered</h2>
             <p class="text-yellow-900">{{ gameDetails.total_pairs_discovered || 'N/A' }}</p>
           </div>
