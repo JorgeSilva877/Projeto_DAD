@@ -250,8 +250,6 @@ export const useGameStore = defineStore('games', () => {
         }
     }
 
-
-    //AQUI
     const totalGames = computed(() => games.value?.length)
 
     const resetPage = () => {
@@ -288,8 +286,6 @@ export const useGameStore = defineStore('games', () => {
         await fetchGames()
       }
 
-      //ATE AQUI
-   
     return {
         fetchScoreboard, fetchPersonalGames, fetchMultiplayerGameUsersDetail, fetchPersonalScoreboard, getCurrentGameId, fetchGames,
         getMultiplayerMostWins, getSinglePlayerBestTime_BoardThreeFour, getSinglePlayerBestTime_BoardFourFour, getSinglePlayerBestTime_BoardSixSix,

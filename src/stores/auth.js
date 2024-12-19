@@ -44,13 +44,28 @@ export const useAuthStore = defineStore('auth', () => {
     const userType = computed(() => {
         return user.value ? user.value.type : ''
     })
-    const userPhotoUrl = computed(() => {
+
+
+    function replaceLast(text, searchValue, replaceValue) {
+        const lastOccurrenceIndex = text.lastIndexOf(searchValue)
+        return `${
+            text.slice(0, lastOccurrenceIndex)
+          }${
+            replaceValue
+          }${
+            text.slice(lastOccurrenceIndex + searchValue.length)
+          }`
+      }
+
+
+      const userPhotoUrl = computed(() => {        
         const photoFile = user.value ? user.value.photoFileName ?? '' : ''
         if (photoFile) {
-            return axios.defaults.baseURL.replaceAll("/api", photoFile)
+            return replaceLast(axios.defaults.baseURL, '/api', photoFile)
         }
         return avatarNoneAssetURL
     })
+
     const userCurrentBalance = computed(() => {
         return user.value ? user.value.brain_coins_balance : ''
     })
